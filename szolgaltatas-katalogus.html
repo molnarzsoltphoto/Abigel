@@ -101,13 +101,12 @@ textarea{min-height:70px;resize:vertical;}
 .setup ol{padding-left:20px;}
 .setup li{margin-bottom:8px;}
 
-/* Abigél egységes komponensek a külön iframe-en belül */
 :root,:root[data-theme="dark"]{--bg:#f8faf9;--panel:#fff;--ink:#1e2e27;--ink-soft:#4a6355;--line:#d8e2dc;--board-bg:#155c34;--board-fg:#d4f0e0;--accent-bike:#2e9d5e;--font-display:'DM Sans',sans-serif;--font-sans:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#f8faf9;--panel:#fff;--ink:#1e2e27;--ink-soft:#4a6355;--line:#d8e2dc;--board-bg:#155c34;--board-fg:#d4f0e0}}
 body{background:#f8faf9;color:#1e2e27}header.board{background:linear-gradient(125deg,#155c34,#1e7a46);padding:25px 28px}.board-inner,.toolbar-inner,main{max-width:1100px}.board h1{font-family:'DM Serif Display',serif;font-size:32px;letter-spacing:0;color:#fff}.tagline{color:#e2f1e8}.sync-status{color:#d4f0e0}.toolbar{background:#fff;border-bottom:1px solid #d8e2dc}button.add,.form-actions button[type=submit]{background:#2e9d5e;color:#fff;border-radius:10px}button.row{border-radius:10px}button.row:hover{background:#f0faf4}
-button,input,select,textarea{font-family:var(--font-sans)}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(46,157,94,.25);outline-offset:2px}
-button.row,.chip,.back,.detail-head,.stepper,dialog,.toolbar input,.toolbar select{border-radius:10px}.chip[aria-pressed="true"]{background:#e5f4ea;color:#155c34}.badge{border-radius:20px;font-weight:600}
-.metric-panel{border:1px solid var(--line);border-left:4px solid #2e9d5e;background:var(--panel);padding:16px;margin:16px 0;border-radius:10px}.metric-panel h3{font-size:17px;color:var(--ink);margin:0 0 12px}.metric-panel p{margin:7px 0;color:var(--ink-soft)}.metric-values{display:flex;flex-wrap:wrap;gap:8px;margin:11px 0}.metric-values span{padding:8px 10px;background:#e8f6ed;border-radius:7px;color:#155c34;font-weight:600}.metric-mini,.owner-mini{color:#155c34;font-size:12px;font-weight:600}.form-row{flex-wrap:wrap}.form-row>div{min-width:130px}.form-row input[type=number]{width:100%;font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:9px 10px;border-radius:10px}
+button,input,select,textarea{font-family:var(--font-sans)}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(46,157,94,.25);outline-offset:2px}button.row,.chip,.back,.detail-head,.stepper,dialog,.toolbar input,.toolbar select{border-radius:10px}.chip[aria-pressed="true"]{background:#e5f4ea;color:#155c34}.badge{border-radius:20px;font-weight:600}
+.metric-panel,.history-panel{border:1px solid var(--line);border-left:4px solid #2e9d5e;background:var(--panel);padding:16px;margin:16px 0;border-radius:10px}.metric-panel h3,.history-panel h3{font-size:17px;color:var(--ink);margin:0 0 12px}.metric-panel p,.history-panel p{margin:7px 0;color:var(--ink-soft)}.metric-values{display:flex;flex-wrap:wrap;gap:8px;margin:11px 0}.metric-values span{padding:8px 10px;background:#e8f6ed;border-radius:7px;color:#155c34;font-weight:600}.metric-mini,.owner-mini{color:#155c34;font-size:12px;font-weight:600}.form-row{flex-wrap:wrap}.form-row>div{min-width:130px}.form-row input[type=number]{width:100%;font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:9px 10px;border-radius:10px}
+.history-form{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin:12px 0}.history-form>label{flex:1 1 120px;font-size:12px}.history-form input{width:100%!important;min-height:37px}.history-form button{border:0;background:#2e9d5e;color:#fff;border-radius:10px;padding:10px 14px;cursor:pointer}.history-form button:disabled{opacity:.6;cursor:wait}.history-list{max-height:270px;overflow:auto}.history-row{padding:10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.history-row strong{color:#155c34}.history-row small{color:var(--ink-soft)}.history-row button{border:1px solid var(--line);background:var(--panel);color:var(--warn);border-radius:8px;padding:5px 9px;cursor:pointer}.history-chart{width:100%;height:115px;margin:10px 0}
 @media(max-width:700px){header.board{padding:20px 16px}.toolbar{padding:12px 16px}main{padding:18px 16px 48px}.toolbar-inner{gap:8px}.form-row>div{min-width:100%}.row{flex-wrap:wrap}.detail-grid{grid-template-columns:1fr}.stepper{overflow:auto}.entry-actions{flex-wrap:wrap}}
 </style>
 </head>
@@ -163,8 +162,9 @@ button.row,.chip,.back,.detail-head,.stepper,dialog,.toolbar input,.toolbar sele
     <label for="fOwner">Projektfelelős</label><input type="text" id="fOwner" placeholder="Név vagy szervezeti egység">
     <label for="fGoal">Elérendő eredmény</label><input type="text" id="fGoal" placeholder="Mit szeretnénk elérni?">
     <div class="form-row"><div><label for="fMetricName">Mérőszám</label><input type="text" id="fMetricName" placeholder="pl. kerékpárhelyek száma"></div><div><label for="fMetricUnit">Mértékegység</label><input type="text" id="fMetricUnit" placeholder="pl. db"></div></div>
-    <div class="form-row"><div><label for="fBaseline">Kiinduló érték</label><input type="number" step="any" id="fBaseline"></div><div><label for="fCurrent">Aktuális tény</label><input type="number" step="any" id="fCurrent"></div><div><label for="fTarget">Célérték</label><input type="number" step="any" id="fTarget"></div></div>
-    <div class="form-row"><div><label for="fMeasuredAt">Mérés dátuma</label><input type="date" id="fMeasuredAt"></div><div><label for="fMetricSource">Adat forrása</label><input type="text" id="fMetricSource" placeholder="pl. belső felmérés"></div></div>
+    <div class="form-row"><div><label for="fBaseline">Kiinduló érték</label><input type="number" step="any" id="fBaseline"></div><div><label for="fCurrent">Aktuális tény</label><input type="number" step="any" id="fCurrent" readonly title="A tényérték mérés rögzítésekor frissül"></div><div><label for="fTarget">Célérték</label><input type="number" step="any" id="fTarget"></div></div>
+    <div class="form-row"><div><label for="fMeasuredAt">Utolsó mérés dátuma</label><input type="date" id="fMeasuredAt" readonly></div><div><label for="fMetricSource">Utolsó mérés forrása</label><input type="text" id="fMetricSource" readonly></div></div>
+    <p>Új tényadatot a szolgáltatás adatlapjának <strong>Új mérés</strong> részén rögzíthetsz; a korábbi mérések megmaradnak.</p>
     <label for="fDeadline">Határidő</label>
     <input type="date" id="fDeadline">
     <label>Egyeztetendő terület(ek)</label>
@@ -242,7 +242,7 @@ function initFirebase(){
   col=db.collection('services');
   col.onSnapshot(snap=>{
     entries=snap.docs.map(d=>Object.assign({id:d.id},d.data()));
-    entries.forEach(e=>{ if(!e.coord) e.coord=[]; if(e.deadline===undefined) e.deadline=''; if(!e.metric)e.metric={}; if(!e.owner)e.owner=''; });
+    entries.forEach(e=>{ if(!e.coord) e.coord=[]; if(e.deadline===undefined) e.deadline=''; if(!e.metric)e.metric={}; if(!e.owner)e.owner=''; if(!Array.isArray(e.metricHistory))e.metricHistory=[]; });
     document.getElementById('syncDot').classList.remove('off');
     document.getElementById('syncText').textContent='Élő szinkron aktív';
     if(entries.length===0 && !seeded){
@@ -303,19 +303,33 @@ function renderListView(){
   main.querySelectorAll('.row').forEach(b=>b.addEventListener('click',()=>{ location.hash='#/'+b.dataset.id; }));
 }
 function metricValue(value){return value===0||value==='0'?'0':value===undefined||value===null||value===''?'–':esc(String(value));}
+function historyPoints(e){return Array.isArray(e.metricHistory)?e.metricHistory.filter(h=>h&&Number.isFinite(Number(h.value))):[];}
+function renderHistory(e){
+  const rows=historyPoints(e).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||''))||String(a.recordedAt||'').localeCompare(String(b.recordedAt||'')));
+  const shown=rows.slice(-12),nums=shown.map(h=>Number(h.value)),min=Math.min(...nums),max=Math.max(...nums),span=max-min||1;
+  const dots=nums.map((n,i)=>[20+i*320/Math.max(1,nums.length-1),95-(n-min)*68/span]);
+  const chart=shown.length>1?'<svg class="history-chart" viewBox="0 0 360 115" preserveAspectRatio="none" role="img" aria-label="Mérési idősor"><line x1="20" y1="96" x2="342" y2="96" stroke="#d8e2dc"/><polyline fill="none" stroke="#1e7a46" stroke-width="3" points="'+dots.map(d=>d.join(',')).join(' ')+'"/>'+dots.map(d=>'<circle cx="'+d[0]+'" cy="'+d[1]+'" r="4" fill="#1e7a46"/>').join('')+'</svg>':'';
+  return '<section class="history-panel"><h3>Mérési előzmények</h3><p>A mérések dátummal és forrással együtt tárolódnak. A grafikon a legutóbbi 12 adatpontot mutatja.</p>'+
+    '<form class="history-form" id="historyForm"><label>Dátum<input type="date" id="historyDate" required></label><label>Tényérték<input type="number" step="any" id="historyValue" required></label><label>Forrás<input type="text" id="historySource" maxlength="160" required placeholder="pl. utasszámlálás"></label><button type="submit">+ Új mérés</button></form>'+
+    chart+'<div class="history-list">'+(rows.length?rows.slice().reverse().map(h=>'<div class="history-row"><span><strong>'+metricValue(h.value)+' '+esc(String(e.metric?.unit||''))+'</strong> · '+esc(String(h.date||''))+'<br><small>Forrás: '+esc(String(h.source||''))+'</small></span><button type="button" data-remove-measurement="'+esc(String(h.id||''))+'" aria-label="Mérés törlése">Törlés</button></div>').join(''):'<p>Még nincs mentett mérés.</p>')+'</div></section>';
+}
 function renderMetric(e){
   const k=e.metric||{};
   if(!k.name&&!k.goal)return '<section class="metric-panel"><h3>Elvárt eredmény és mérőszám</h3><p>Még nincs megadva; a Szerkesztés gombbal pótolható.</p></section>';
-  return '<section class="metric-panel"><h3>Elvárt eredmény és mérőszám</h3>'+
-    '<p><strong>Cél:</strong> '+esc(k.goal||'nincs megadva')+'</p>'+
+  return '<section class="metric-panel"><h3>Elvárt eredmény és mérőszám</h3><p><strong>Cél:</strong> '+esc(k.goal||'nincs megadva')+'</p>'+
     '<p><strong>Mérőszám:</strong> '+esc(k.name||'nincs megadva')+' '+esc(k.unit||'')+'</p>'+
     '<div class="metric-values"><span>Kiinduló: '+metricValue(k.baseline)+'</span><span>Tény: '+metricValue(k.current)+'</span><span>Célérték: '+metricValue(k.target)+'</span></div>'+
-    '<p>Mérés: '+esc(k.measuredAt||'nincs megadva')+' · Forrás: '+esc(k.source||'nincs megadva')+'</p></section>';
+    '<p>Utolsó mérés: '+esc(k.measuredAt||'nincs megadva')+' · Forrás: '+esc(k.source||'nincs megadva')+'</p></section>';
 }
 function sendKpisToAbigel(error){
   if(window.parent===window)return;
-  const data=entries.map(e=>({id:e.id,name:e.name,owner:e.owner||'',category:e.category,status:e.status,deadline:e.deadline||'',metric:e.metric||null}));
+  const data=entries.map(e=>({id:e.id,name:e.name,owner:e.owner||'',category:e.category,status:e.status,deadline:e.deadline||'',metric:e.metric||null,metricHistory:e.metricHistory||[]}));
   window.parent.postMessage({type:'abigel:services',services:data,error:error||''},window.location.origin);
+}
+function freshValue(history,legacyMetric){
+  if(!history.length)return {current:legacyMetric.current||'',measuredAt:legacyMetric.measuredAt||'',source:legacyMetric.source||''};
+  const recent=history.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.recordedAt||'').localeCompare(String(a.recordedAt||'')))[0];
+  return {current:String(recent.value),measuredAt:recent.date,source:recent.source};
 }
 function renderDetailView(id){
   const e=entries.find(x=>x.id===id);
@@ -334,10 +348,46 @@ function renderDetailView(id){
     +'<div class="detail-grid"><div><label>Egyeztetendő terület(ek)</label><div class="tags">'+coordHtml+'</div></div>'
     +'<div><label>Határidő</label><div class="'+(isOverdue(e)?'row-deadline overdue':'')+'">'+(e.deadline?huDate(e.deadline):'Nincs megadva')+'</div></div></div>'
     +'<div class="detail-grid"><div><label>Projektfelelős</label><div>'+esc(e.owner||'nincs megadva')+'</div></div></div>'
-    +renderMetric(e)
+    +renderMetric(e)+renderHistory(e)
     +'<p class="detail-desc">'+(esc(e.desc)||'Nincs leírás megadva.')+'</p>'
     +'<div class="entry-meta">Frissítve: '+esc(e.updated)+'</div>'
     +'<div class="entry-actions"><button data-edit="'+e.id+'">Szerkesztés</button><button class="danger" data-del="'+e.id+'">Törlés</button></div>';
+  const now=new Date();
+  const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+  document.getElementById('historyDate').value=today;
+  const historyForm=document.getElementById('historyForm');
+  historyForm.addEventListener('submit',async ev=>{
+    ev.preventDefault();
+    if(!e.metric?.name){alert('Előbb add meg a mérőszám nevét a Szerkesztés menüben.');return;}
+    const date=document.getElementById('historyDate').value,value=document.getElementById('historyValue').value,source=document.getElementById('historySource').value.trim();
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date>today||value===''||!Number.isFinite(Number(value))||!source){alert('Adj meg érvényes, nem jövőbeli dátumot, tényértéket és adatforrást.');return;}
+    const button=historyForm.querySelector('button[type=submit]');button.disabled=true;
+    const record={id:'m_'+Date.now()+'_'+Math.random().toString(36).slice(2,9),date,value:Number(value),source,recordedAt:new Date().toISOString()};
+    try{
+      await db.runTransaction(async tx=>{
+        const ref=col.doc(e.id),doc=await tx.get(ref);
+        if(!doc.exists)throw Error('A tétel már nem létezik');
+        const data=doc.data(),history=Array.isArray(data.metricHistory)?data.metricHistory.slice():[];
+        history.push(record);
+        const latest=freshValue(history,data.metric||{});
+        tx.update(ref,{metricHistory:history,metric:{...(data.metric||{}),...latest},updated:new Date().toISOString().slice(0,10)});
+      });
+      historyForm.reset();
+    }catch(error){alert('A mérés mentése nem sikerült: '+error.message);button.disabled=false;}
+  });
+  main.querySelectorAll('[data-remove-measurement]').forEach(b=>b.addEventListener('click',async()=>{
+    if(!confirm('Biztosan törlöd ezt a mérési adatot?'))return;
+    b.disabled=true;
+    try{
+      await db.runTransaction(async tx=>{
+        const ref=col.doc(e.id),doc=await tx.get(ref);
+        if(!doc.exists)throw Error('A tétel már nem létezik');
+        const data=doc.data(),history=(Array.isArray(data.metricHistory)?data.metricHistory:[]).filter(h=>h.id!==b.dataset.removeMeasurement);
+        const latest=history.length?freshValue(history,data.metric||{}):{current:'',measuredAt:'',source:''};
+        tx.update(ref,{metricHistory:history,metric:{...(data.metric||{}),...latest},updated:new Date().toISOString().slice(0,10)});
+      });
+    }catch(error){alert('A mérés törlése nem sikerült: '+error.message);b.disabled=false;}
+  }));
   document.getElementById('backBtn').addEventListener('click',()=>{ location.hash=''; });
   main.querySelector('[data-edit]').addEventListener('click',()=>openDialog(e.id));
   main.querySelector('[data-del]').addEventListener('click',()=>{
@@ -401,9 +451,9 @@ document.getElementById('entryForm').addEventListener('submit',(ev)=>{
     owner:document.getElementById('fOwner').value.trim(),
     metric:{goal:document.getElementById('fGoal').value.trim(),name:document.getElementById('fMetricName').value.trim(),unit:document.getElementById('fMetricUnit').value.trim(),baseline:document.getElementById('fBaseline').value,current:document.getElementById('fCurrent').value,target:document.getElementById('fTarget').value,measuredAt:document.getElementById('fMeasuredAt').value,source:document.getElementById('fMetricSource').value.trim()}
   };
-  if(data.metric.name && (data.metric.target==='' || data.metric.unit==='')){alert('A mérőszámhoz adj meg mértékegységet és célértéket.');return;}
-  if(!data.metric.name && (data.metric.baseline!==''||data.metric.current!==''||data.metric.target!=='')){alert('Az értékekhez add meg a mérőszám nevét.');return;}
-  if(editId){ col.doc(editId).update(data); } else { col.add(data); }
+  if(data.metric.name && (data.metric.target===''||data.metric.unit==='')){alert('Add meg a mérőszám mértékegységét és célértékét.');return;}
+  if(!data.metric.name&&(data.metric.baseline!==''||data.metric.target!=='')){alert('Az értékekhez add meg a mérőszám nevét.');return;}
+  if(editId){ col.doc(editId).update(data).catch(err=>alert('Nem sikerült menteni: '+err.message)); } else { col.add(data).catch(err=>alert('Nem sikerült menteni: '+err.message)); }
   document.getElementById('dialog').close();
 });
 document.getElementById('search').addEventListener('input', route);
