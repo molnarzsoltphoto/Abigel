@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Abigél – MÁV Kommunikációs Asszisztens</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -154,32 +155,32 @@ textarea{min-height:85px;}
 .tblw::-webkit-scrollbar-track{background:var(--t-s1);}
 .tblw::-webkit-scrollbar-thumb{background:var(--t-s3);border-radius:3px;}
 
-table{width:100%;border-collapse:collapse;table-layout:auto;}
-thead{position:sticky;top:0;z-index:30;}
-thead tr.trg th{background:var(--t-s2);border-bottom:1px solid var(--t-brd);font-family:var(--font-bc);font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t-tx2);padding:5px 3px 4px;text-align:center;white-space:nowrap;}
-thead tr.trg th.gh{border-left:2px solid var(--t-ac);background:rgba(46,157,94,.1);color:var(--t-acl);}
-thead tr.trg th.thl{text-align:left;padding-left:7px;}
-thead tr.trs th{background:var(--t-s1);border-bottom:2px solid var(--t-brd2);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t-tx3);padding:3px 2px;text-align:center;white-space:nowrap;}
-thead tr.trs th.su{border-left:1px solid rgba(46,157,94,.18);}
+#page-feladatok table{width:100%;border-collapse:collapse;table-layout:auto;}
+#page-feladatok thead{position:sticky;top:0;z-index:30;}
+#page-feladatok thead tr.trg th{background:var(--t-s2);border-bottom:1px solid var(--t-brd);font-family:var(--font-bc);font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t-tx2);padding:5px 3px 4px;text-align:center;white-space:nowrap;}
+#page-feladatok thead tr.trg th.gh{border-left:2px solid var(--t-ac);background:rgba(46,157,94,.1);color:var(--t-acl);}
+#page-feladatok thead tr.trg th.thl{text-align:left;padding-left:7px;}
+#page-feladatok thead tr.trs th{background:var(--t-s1);border-bottom:2px solid var(--t-brd2);font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t-tx3);padding:3px 2px;text-align:center;white-space:nowrap;}
+#page-feladatok thead tr.trs th.su{border-left:1px solid rgba(46,157,94,.18);}
 
-tbody tr{border-bottom:1px solid var(--t-brd);transition:background .09s;}
-tbody tr:hover{background:rgba(255,255,255,.025);}
-tbody tr.dr{opacity:.38;}
-tbody tr.dr td.tdn{text-decoration:line-through;color:var(--t-tx3);}
-tbody td{padding:5px 2px;vertical-align:middle;text-align:center;}
-td.tdc{padding:5px 3px;cursor:pointer;}
+#page-feladatok tbody tr{border-bottom:1px solid var(--t-brd);transition:background .09s;}
+#page-feladatok tbody tr:hover{background:rgba(255,255,255,.025);}
+#page-feladatok tbody tr.dr{opacity:.38;}
+#page-feladatok tbody tr.dr td.tdn{text-decoration:line-through;color:var(--t-tx3);}
+#page-feladatok tbody td{padding:5px 2px;vertical-align:middle;text-align:center;}
+#page-feladatok td.tdc{padding:5px 3px;cursor:pointer;}
 .dchk{width:14px;height:14px;border-radius:4px;border:2px solid var(--t-brd2);background:none;display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:transparent;transition:all .12s;cursor:pointer;}
 .dchk:hover{border-color:var(--s2c);}
 .dr .dchk{background:var(--s2b);border-color:var(--s2c);color:var(--s2c);}
-td.tdn{text-align:left;font-size:12px;font-weight:500;padding-left:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--t-tx);}
-td.tdn[contenteditable]{cursor:text;outline:none;}
-td.tdn[contenteditable]:focus{background:var(--t-s3);outline:1px solid var(--t-brd2);border-radius:4px;overflow:visible;white-space:normal;}
-td.tdd{font-family:var(--font-mono);font-size:10px;color:var(--t-tx2);cursor:pointer;white-space:nowrap;overflow:hidden;}
-td.tdd.ov{color:var(--red);}td.tdd.sn{color:var(--orange);}
+#page-feladatok td.tdn{text-align:left;font-size:12px;font-weight:500;padding-left:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--t-tx);}
+#page-feladatok td.tdn[contenteditable]{cursor:text;outline:none;}
+#page-feladatok td.tdn[contenteditable]:focus{background:var(--t-s3);outline:1px solid var(--t-brd2);border-radius:4px;overflow:visible;white-space:normal;}
+#page-feladatok td.tdd{font-family:var(--font-mono);font-size:10px;color:var(--t-tx2);cursor:pointer;white-space:nowrap;overflow:hidden;}
+#page-feladatok td.tdd.ov{color:var(--red);}td.tdd.sn{color:var(--orange);}
 .dhi{display:none;background:var(--t-s2);border:1px solid var(--t-brd2);border-radius:4px;padding:3px 5px;color:#fff;font-family:var(--font-mono);font-size:10px;color-scheme:dark;width:100%;}
-td.tdp{font-family:var(--font-mono);font-size:9px;color:var(--t-tx3);}
-td.tdp.alld{color:var(--s2c);}
-td.gsep{border-left:2px solid rgba(46,157,94,.2);}
+#page-feladatok td.tdp{font-family:var(--font-mono);font-size:9px;color:var(--t-tx3);}
+#page-feladatok td.tdp.alld{color:var(--s2c);}
+#page-feladatok td.gsep{border-left:2px solid rgba(46,157,94,.2);}
 .sbtn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:18px;border-radius:4px;border:none;cursor:pointer;position:relative;transition:transform .09s;}
 .sbtn:hover{transform:scale(1.22);}
 .sbtn .dot{width:6px;height:6px;border-radius:50%;pointer-events:none;}
@@ -195,6 +196,45 @@ td.gsep{border-left:2px solid rgba(46,157,94,.2);}
 @keyframes rowIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 .rnew{animation:rowIn .18s ease forwards;}
 
+
+/* Feladatkövető: állandó világos mód az Abigél palettájában. */
+#page-feladatok{
+  --t-bg:#f8faf9;--t-s1:#ffffff;--t-s2:#f0faf4;--t-s3:#e6f5ec;--t-s4:#f7fbf8;
+  --t-brd:#d8e2dc;--t-brd2:#a8c9b5;
+  --t-tx:#1e2e27;--t-tx2:#4a6355;--t-tx3:#647e6e;
+  --t-ac:#1e7a46;--t-acl:#155c34;--t-acg:rgba(30,122,70,.18);--t-acs:#e1f4e8;
+  --s0b:#e8eeea;--s0d:#667f70;
+  --s1b:#fff2d9;--s1c:#996000;--s1g:rgba(153,96,0,.15);
+  --s2b:#dff3e5;--s2c:#187340;--s2g:rgba(24,115,64,.16);
+  --red:#bd3030;--orange:#a7580c;
+  background:var(--t-bg);color:var(--t-tx);
+}
+#page-feladatok .tw,#page-feladatok .tblw{background:var(--t-bg);color:var(--t-tx)}
+#page-feladatok .thdr,#page-feladatok .ctrl{background:var(--t-s1)}
+#page-feladatok .thdr .hs strong{color:var(--t-tx)}
+#page-feladatok .thdr .hs.warn strong{color:var(--red)}
+#page-feladatok .tform{background:var(--t-s4);height:auto;min-height:56px;display:flex;flex-wrap:wrap;padding:9px 12px;gap:8px}
+#page-feladatok .ti{background:#fff;border:1px solid var(--t-brd2);color:var(--t-tx);min-height:36px;color-scheme:light}
+#page-feladatok .ti::placeholder{color:var(--t-tx3)}
+#page-feladatok #tinp-name{flex:1 1 230px}
+#page-feladatok .tadd{min-height:36px;color:#fff}
+#page-feladatok .ctrl{height:auto;min-height:42px;flex-wrap:wrap;padding:8px 12px;gap:8px}
+#page-feladatok .legg{flex-wrap:wrap;margin-left:0}
+#page-feladatok .fb{color:var(--t-tx2)}
+#page-feladatok .fb:hover{color:var(--t-acl)}
+#page-feladatok .fb.act{background:var(--t-acs);border-color:var(--t-ac);color:var(--t-acl)}
+#page-feladatok .tblw{overflow:auto;max-width:100%;overscroll-behavior:contain}
+#page-feladatok table{width:max-content;min-width:100%;background:var(--t-bg);color:var(--t-tx);border-collapse:collapse;table-layout:auto}
+#page-feladatok thead{position:sticky;top:0;z-index:10}
+#page-feladatok thead tr.trg th{background:var(--t-s2);color:var(--t-tx2)}
+#page-feladatok thead tr.trg th.gh{background:#e0f3e7;color:var(--t-acl)}
+#page-feladatok thead tr.trs th{background:var(--t-s1);color:var(--t-tx3)}
+#page-feladatok tbody tr:hover{background:#ebf6ef}
+#page-feladatok td.tdn{color:var(--t-tx)}
+#page-feladatok td.tdn[contenteditable]:focus{background:#eef8f0;color:var(--t-tx)}
+#page-feladatok .sbtn::after{background:#fff;color:var(--t-tx);box-shadow:0 2px 12px rgba(0,0,0,.12)}
+#page-feladatok .ti:focus-visible,#page-feladatok button:focus-visible{outline:2px solid var(--t-ac);outline-offset:2px}
+@media(max-width:700px){#page-feladatok .tform .tadd{flex:1 1 100%}#page-feladatok .ctrl .tsep{display:none}#page-feladatok .legg{width:100%}}
 /* ===== TÉRKÉP ===== */
 .mw{display:flex;flex-direction:column;height:100%;min-height:0;}
 .mbar{flex-shrink:0;background:#fff;border-bottom:1px solid var(--gray100);padding:9px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
@@ -597,11 +637,9 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
 .pl-journey-table td { padding:6px 8px; border-bottom:1px solid var(--gray100); vertical-align:top; }
 .wizard-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:1000; display:flex; align-items:center; justify-content:center; }
 .wizard-box { background:#fff; border-radius:16px; padding:32px; max-width:560px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.15); }
-
-/* Horizont: a Médiafigyelő nézet teljes magasságú beágyazása. */
-#page-media.active{display:flex;flex-direction:column;min-height:0;overflow:hidden;padding:0;}
-.horizont-frame-wrap{flex:1;min-height:0;width:100%;}
-#horizont-frame{display:block;width:100%;height:100%;border:0;background:#f8faf9;}
+/* Horizont – önálló, teljes magasságú nézet az Abigél alkalmazásban. */
+#page-media.active{display:flex;min-height:0;overflow:hidden;padding:0;}
+#horizont-frame{display:block;width:100%;height:100%;min-height:0;border:0;background:#f8faf9;}
 </style>
 </head>
 <body>
@@ -654,30 +692,9 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
       <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Szerkesztői naptár
     </button>
     <div class="nav-sep">🗂️ Termékfejlesztés</div>
-    <button class="nb" onclick="showPage('pl_dashboard')">
-      <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>PM Áttekintés
-    </button>
-    <button class="nb" onclick="showPage('pl_projects')">
-      <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Projektek
-    </button>
-    <button class="nb" onclick="showPage('pl_kpi')">
-      <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>KPI mutatók
-    </button>
-    <button class="nb" onclick="showPage('pl_bizcase')">
-      <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Üzleti eset
-    </button>
-    <button class="nb" onclick="showPage('pl_partners')">
-      <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Partnerek
-    </button>
-    <button class="nb" onclick="showPage('pl_ai')">
-      <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>AI kihívások
-    </button>
-    <button class="nb" onclick="showPage('pl_kb')">
-      <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Tudásbázis
-    </button>
-    <button class="nb" onclick="showPage('terkep')">
-      <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>Vonat térkép
-    </button>
+    <button class="nb" onclick="showPage('pl_kpi')">🎯 KPI mutatók</button>
+    <button class="nb" onclick="showPage('szolgaltatasok')">📋 Szolgáltatás-katalógus</button>
+    <button class="nb" onclick="showPage('terkep')">🗺️ Vonat térkép</button>
     <div class="nav-lbl">Monitoring</div>
     <button class="nb" onclick="showPage('vaganyzar')">
       <svg class="nic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Vágányzár
@@ -1026,46 +1043,12 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
     </div>
   </div>
 
-  <!-- PRODUCT LAB OLDALAK -->
-  <div class="page" id="page-pl_dashboard">
-    <div class="gr"><div class="gr-av">A</div><div class="gr-b">PM Áttekintés – projektek, KPI-ok, AI észrevételek és a legutóbb generált szövegek egy helyen. 📊</div></div>
-    <div id="pl-dashboard-content"><div class="loading"><div class="spinner"></div>Betöltés...</div></div>
-  </div>
-
-  <div class="page" id="page-pl_projects">
-    <div class="gr"><div class="gr-av">A</div><div class="gr-b">Projektek – új projekt indítása varázslóval, meglévők kezelése. Életciklus, szegmensek, kutatás, üzleti eset egy helyen. 🗂️</div></div>
-    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-      <select id="pl-proj-switcher" style="border:1.5px solid var(--gray200);border-radius:7px;padding:6px 10px;font-family:var(--font);font-size:13px;flex:1;min-width:200px;" onchange="plSwitchProject(this.value)"></select>
-      <button class="btn btn-p" onclick="openWizard()">+ Új projekt</button>
-    </div>
-    <div id="pl-projects-content"><div class="loading"><div class="spinner"></div>Betöltés...</div></div>
-  </div>
-
+  <!-- TERMÉKFEJLESZTÉS -->
   <div class="page" id="page-pl_kpi">
     <div class="gr"><div class="gr-av">A</div><div class="gr-b">Teljesítménymutatók – az aktuális projekt KPI-jainak nyomon követése, célok vs. tényadatok. 🎯</div></div>
     <div id="pl-kpi-content"><div class="loading"><div class="spinner"></div>Betöltés...</div></div>
   </div>
-
-  <div class="page" id="page-pl_bizcase">
-    <div class="gr"><div class="gr-av">A</div><div class="gr-b">Üzleti eset – az aktuális projekt business case-je: háttér, javaslat, alternatívák, hatás, kockázatok. 💼</div></div>
-    <div id="pl-bizcase-content"><div class="loading"><div class="spinner"></div>Betöltés...</div></div>
-  </div>
-
-  <div class="page" id="page-pl_partners">
-    <div class="gr"><div class="gr-av">A</div><div class="gr-b">Partnerek – az aktuális projekt partnerei, kapcsolattartók, tárgyalási státusz. 🤝</div></div>
-    <div id="pl-partners-content"><div class="loading"><div class="spinner"></div>Betöltés...</div></div>
-  </div>
-
-  <div class="page" id="page-pl_ai">
-    <div class="gr"><div class="gr-av">A</div><div class="gr-b">AI kihívások – stratégiai kérdések, piacszimulációk és gondolkodástámogató elemzések az aktuális projekthez. 🤖</div></div>
-    <div id="pl-ai-content"><div class="loading"><div class="spinner"></div>Betöltés...</div></div>
-  </div>
-
-  <div class="page" id="page-pl_kb">
-    <div class="gr"><div class="gr-av">A</div><div class="gr-b">Tudásbázis – belső dokumentumok, benchmark anyagok, referenciák. 📚</div></div>
-    <div id="pl-kb-content"><div class="loading"><div class="spinner"></div>Betöltés...</div></div>
-  </div>
-
+  <div class="page-full" id="page-szolgaltatasok"><iframe id="catalog-frame" title="Szolgáltatás-katalógus" loading="lazy" style="display:block;width:100%;height:100%;min-height:0;border:0;background:#f8faf9"></iframe></div>
   <div id="modalRoot"></div>
 
   <!-- BEÁLLÍTÁSOK -->
@@ -1103,15 +1086,13 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
     </div>
   </div>
 
-  <!-- HORIZONT – a korábbi Médiafigyelő helyén -->
-  <div class="page" id="page-media">
-    <div class="horizont-frame-wrap">
-      <iframe id="horizont-frame"
-        src="https://molnarzsoltphoto.github.io/horizont/"
-        title="Horizont — személyes hírszemle"
-        loading="lazy"
-        referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    </div>
+  <!-- HORIZONT – a Médiafigyelő helyén -->
+  <div class="page-full" id="page-media">
+    <iframe id="horizont-frame"
+      src="https://molnarzsoltphoto.github.io/horizont/"
+      title="Horizont — személyes hírszemle"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
   </div>
 
   <!-- VÁGÁNYZÁR -->
@@ -1216,21 +1197,17 @@ const META={
   terkep:{t:'Vonat térkép',s:'Élő vonatok – holavonat.is'},
   vaganyzar:{t:'Vágányzár',s:'Aktuális és közelgő vágányzárak – mavcsoport.hu'},
   media:{t:'Horizont hírszemle',s:'Friss hírek a közlekedéstől a csillagokig'},
-  pl_dashboard:{t:'PM Áttekintés',s:'Projektek, KPI-ok, AI észrevételek egy helyen'},
-  pl_projects:{t:'Projektek',s:'Termékfejlesztési projektek életciklus menedzsmentje'},
   pl_kpi:{t:'KPI mutatók',s:'Teljesítménymutatók – célok vs. tényadatok'},
-  pl_bizcase:{t:'Üzleti eset',s:'Business case – háttér, javaslat, kockázatok'},
-  pl_partners:{t:'Partnerek',s:'Partneri kapcsolatok és tárgyalási státusz'},
-  pl_ai:{t:'AI kihívások',s:'Stratégiai kérdések és gondolkodástámogató elemzések'},
-  pl_kb:{t:'Tudásbázis',s:'Belső dokumentumok és benchmark anyagok'},
+  szolgaltatasok:{t:'Szolgáltatás-katalógus',s:'Utasélményt érintő szolgáltatások'},
   beallitasok:{t:'Beállítások',s:'API kulcs és egyéb beállítások'}
 };
-const ORD=['dashboard','sajto','sajtovalasz','social','beszed','esemeny','elozmeny','feladatok','naptar','terkep','vaganyzar','media','pl_dashboard','pl_projects','pl_kpi','pl_bizcase','pl_partners','pl_ai','pl_kb','beallitasok'];
+const ORD=['dashboard','sajto','sajtovalasz','social','beszed','esemeny','elozmeny','feladatok','naptar','terkep','vaganyzar','media','pl_kpi','szolgaltatasok','beallitasok'];
 let mapOK=false;
 
 function showPage(n){
   document.querySelectorAll('.page,.page-full').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  if(['pl_dashboard','pl_projects','pl_bizcase','pl_partners','pl_ai','pl_kb'].includes(n))n='pl_kpi';
   const pg=document.getElementById('page-'+n);
   if(pg)pg.classList.add('active');
   const m=META[n]||{t:n,s:''};
@@ -1242,16 +1219,11 @@ function showPage(n){
   if(n==='feladatok')renderTasks();
   if(n==='naptar')renderCal();
   if(n==='elozmeny')renderHistory();
-  if(n==='pl_dashboard')plRenderDashboard();
-  if(n==='pl_projects')plRenderProjects();
   if(n==='pl_kpi')plRenderKpi();
-  if(n==='pl_bizcase')plRenderBizcase();
-  if(n==='pl_partners')plRenderPartners();
-  if(n==='pl_ai')plRenderAi();
-  if(n==='pl_kb')plRenderKb();
+  if(n==='szolgaltatasok'){const f=document.getElementById('catalog-frame');if(f&&!f.getAttribute('src'))f.src='szolgaltatas-katalogus.html';}
   if(n==='dashboard')updStats();
   if(n==='terkep'){
-    if(!mapOK){initMap();mapOK=true;}
+    if(!mapOK){if(typeof L==='undefined'){document.getElementById('map-cnt').textContent='A térképkönyvtár nem töltődött be';}else{initMap();mapOK=true;setTimeout(()=>lMap.invalidateSize(),180);}}
     else setTimeout(()=>{if(lMap)lMap.invalidateSize();},120);
     loadHistorikusStat();
   }
@@ -2134,8 +2106,8 @@ function getPos(v){
 
 function initMap(){
   lMap=L.map('map',{center:[47.4,19.0],zoom:7});
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    attribution:'© OpenStreetMap | holavonat.is',maxZoom:19
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> közreműködők | holavonat.is',maxZoom:19,referrerPolicy:'strict-origin-when-cross-origin'
   }).addTo(lMap);
   loadTrains();
   renderClosureOverlay();
