@@ -197,7 +197,6 @@ textarea{min-height:85px;}
 .rnew{animation:rowIn .18s ease forwards;}
 
 
-/* Abigél – világos feladatkövető, saját hatókörben */
 #page-feladatok{--t-bg:#f8faf9;--t-s1:#fff;--t-s2:#f0faf4;--t-s3:#e6f5ec;--t-s4:#f7fbf8;--t-brd:#d8e2dc;--t-brd2:#a8c9b5;--t-tx:#1e2e27;--t-tx2:#4a6355;--t-tx3:#647e6e;--t-ac:#1e7a46;--t-acl:#155c34;--t-acg:rgba(30,122,70,.18);--t-acs:#e1f4e8;--s0b:#e8eeea;--s0d:#667f70;--s1b:#fff2d9;--s1c:#996000;--s1g:rgba(153,96,0,.15);--s2b:#dff3e5;--s2c:#187340;--s2g:rgba(24,115,64,.16);--red:#bd3030;--orange:#a7580c;background:var(--t-bg);color:var(--t-tx)}
 #page-feladatok .tw,#page-feladatok .tblw{background:var(--t-bg);color:var(--t-tx)}#page-feladatok .thdr,#page-feladatok .ctrl{background:var(--t-s1)}#page-feladatok .thdr .hs strong{color:var(--t-tx)}#page-feladatok .thdr .hs.warn strong{color:var(--red)}#page-feladatok .tform{background:var(--t-s4);height:auto;min-height:56px;display:flex;flex-wrap:wrap;padding:9px 12px;gap:8px}#page-feladatok .ti{background:#fff;border:1px solid var(--t-brd2);color:var(--t-tx);min-height:36px;color-scheme:light}#page-feladatok .ti::placeholder{color:var(--t-tx3)}#page-feladatok #tinp-name{flex:1 1 230px}#page-feladatok .tadd{min-height:36px;color:#fff}#page-feladatok .ctrl{height:auto;min-height:42px;flex-wrap:wrap;padding:8px 12px;gap:8px}#page-feladatok .legg{flex-wrap:wrap;margin-left:0}#page-feladatok .fb{color:var(--t-tx2)}#page-feladatok .fb.act{background:var(--t-acs);border-color:var(--t-ac);color:var(--t-acl)}#page-feladatok .tblw{overflow:auto;max-width:100%;overscroll-behavior:contain}#page-feladatok table{width:max-content;min-width:100%;background:var(--t-bg);color:var(--t-tx);border-collapse:collapse;table-layout:auto}#page-feladatok thead{position:sticky;top:0;z-index:10}#page-feladatok thead tr.trg th{background:var(--t-s2);color:var(--t-tx2)}#page-feladatok thead tr.trs th{background:var(--t-s1);color:var(--t-tx3)}#page-feladatok tbody tr:hover{background:#ebf6ef}#page-feladatok td.tdn{color:var(--t-tx)}#page-feladatok td.tdn[contenteditable]:focus{background:#eef8f0;color:var(--t-tx)}#page-feladatok .sbtn::after{background:#fff;color:var(--t-tx)}@media(max-width:700px){#page-feladatok .tform .tadd{flex:1 1 100%}#page-feladatok .ctrl .tsep{display:none}#page-feladatok .legg{width:100%}}
 /* ===== TÉRKÉP ===== */
@@ -603,20 +602,12 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
 .wizard-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:1000; display:flex; align-items:center; justify-content:center; }
 .wizard-box { background:#fff; border-radius:16px; padding:32px; max-width:560px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.15); }
 
-/* Egységes Abigél komponensek és képernyőméretek */
 :root{--ui-radius:10px;--ui-ring:rgba(46,157,94,.23)}
-#page-feladatok button,#page-pl_kpi button{font-family:var(--font)}
-#page-feladatok button:focus-visible,#page-feladatok input:focus-visible,#page-pl_kpi button:focus-visible,#page-pl_kpi input:focus-visible{outline:3px solid var(--ui-ring);outline-offset:2px}
-#page-feladatok .tadd,#page-feladatok .ti,#page-feladatok .fb,#page-pl_kpi .btn{border-radius:var(--ui-radius)}
-#page-feladatok .thdr{min-height:60px;height:auto;padding:8px 14px;flex-wrap:wrap}
-#page-feladatok .hs{min-width:78px}
-#page-feladatok .tform #tinp-date{width:145px}#page-feladatok .tform #tinp-time{width:105px!important}
-#page-pl_kpi .pl-card{border:1px solid var(--gray200);border-radius:var(--ui-radius)}
-@media(max-width:1024px){.sidebar{width:190px}.main{margin-left:190px}.topbar{padding:0 18px}.page{padding:18px}.gr{flex-wrap:wrap}}
-@media(max-width:700px){.sidebar{width:72px}.main{margin-left:72px}.sidebar .nb{font-size:0;justify-content:center;padding:10px 4px}.sidebar .nb .nic{width:20px;height:20px;opacity:1}.sidebar .nav-lbl,.sidebar .nav-sep,.sidebar .logo-name,.sidebar .logo-tag,.sidebar .sb-foot{display:none}.sidebar .logo-av{margin:auto}.sidebar .sb-hdr{padding:14px 8px}.sidebar .nbadge{font-size:10px;position:absolute;right:2px}.main .topbar{height:auto;min-height:56px}.page{padding:14px}#page-feladatok .hs{min-width:60px;padding:0 8px}#page-feladatok .tform #tinp-date{width:130px}#page-feladatok .tform #tinp-time{width:95px!important}}
-@media(max-width:420px){.sidebar{width:58px}.main{margin-left:58px}#page-feladatok .hs{min-width:56px}#page-feladatok .thdr{padding:8px}.topbar{padding:0 10px}}
-.service-kpi-section{margin:24px 0}.service-kpi-section>h3{font-size:18px;color:var(--gray800);margin-bottom:6px}.service-kpi-section>p{font-size:12px;color:var(--gray600);margin-bottom:14px}.service-kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:14px}.service-kpi-card{border-left:4px solid var(--g500)!important}.service-kpi-card h3{font-size:15px!important;line-height:1.3}.service-kpi-meta{color:var(--gray600);font-size:11px;margin:9px 0}.service-kpi-goal{font-size:12px;line-height:1.4}.service-kpi-name{color:var(--g700);font-weight:700;font-size:13px;margin-top:9px}.service-kpi-values{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.service-kpi-values span{background:var(--g50);border:1px solid var(--g100);padding:6px;border-radius:7px;font-size:12px}.service-open{margin-top:7px}
-.mobile-nav-icon{display:none}@media(max-width:700px){.sidebar .mobile-nav-icon{display:inline;font-size:19px;line-height:1}.sidebar .mobile-nav-label{display:none}}
+#page-feladatok button,#page-pl_kpi button{font-family:var(--font)}#page-feladatok button:focus-visible,#page-feladatok input:focus-visible,#page-pl_kpi button:focus-visible,#page-pl_kpi input:focus-visible{outline:3px solid var(--ui-ring);outline-offset:2px}
+#page-feladatok .tadd,#page-feladatok .ti,#page-feladatok .fb,#page-pl_kpi .btn{border-radius:var(--ui-radius)}#page-feladatok .thdr{min-height:60px;height:auto;padding:8px 14px;flex-wrap:wrap}#page-feladatok .hs{min-width:78px}#page-feladatok .tform #tinp-date{width:145px}#page-feladatok .tform #tinp-time{width:105px!important}#page-pl_kpi .pl-card{border:1px solid var(--gray200);border-radius:var(--ui-radius)}
+.mobile-nav-icon{display:none}@media(max-width:1024px){.sidebar{width:190px}.main{margin-left:190px}.topbar{padding:0 18px}.page{padding:18px}.gr{flex-wrap:wrap}}@media(max-width:700px){.sidebar{width:72px}.main{margin-left:72px}.sidebar .nb{font-size:0;justify-content:center;padding:10px 4px}.sidebar .nb .nic{width:20px;height:20px;opacity:1}.sidebar .mobile-nav-icon{display:inline;font-size:19px;line-height:1}.sidebar .mobile-nav-label{display:none}.sidebar .nav-lbl,.sidebar .nav-sep,.sidebar .logo-name,.sidebar .logo-tag,.sidebar .sb-foot{display:none}.sidebar .logo-av{margin:auto}.sidebar .sb-hdr{padding:14px 8px}.sidebar .nbadge{font-size:10px;position:absolute;right:2px}.main .topbar{height:auto;min-height:56px}.page{padding:14px}#page-feladatok .hs{min-width:60px;padding:0 8px}#page-feladatok .tform #tinp-date{width:130px}#page-feladatok .tform #tinp-time{width:95px!important}}@media(max-width:420px){.sidebar{width:58px}.main{margin-left:58px}#page-feladatok .hs{min-width:56px}#page-feladatok .thdr{padding:8px}.topbar{padding:0 10px}}
+
+.service-kpi-section{margin:24px 0}.service-kpi-section>h3{font-size:18px;color:var(--gray800);margin-bottom:6px}.service-kpi-section>p{font-size:12px;color:var(--gray600);margin-bottom:14px}.service-kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}.service-kpi-card{border-left:4px solid var(--g500)!important}.service-kpi-card h3{font-size:15px!important;line-height:1.3}.service-kpi-meta{color:var(--gray600);font-size:11px;margin:9px 0}.service-kpi-goal{font-size:12px;line-height:1.4}.service-kpi-name{color:var(--g700);font-weight:700;font-size:13px;margin-top:9px}.service-kpi-values{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.service-kpi-values span{background:var(--g50);border:1px solid var(--g100);padding:6px;border-radius:7px;font-size:12px}.service-open{margin-top:7px}.history-chart{width:100%;height:110px;margin:6px 0}.history-details summary{color:var(--g700);cursor:pointer;font-weight:600;font-size:12px}.history-list{max-height:210px;overflow:auto}.history-list>div{display:flex;flex-wrap:wrap;gap:6px 12px;padding:7px 0;border-bottom:1px solid var(--gray100);font-size:11px}.history-list small{color:var(--gray600)}
 </style>
 </head>
 <body>
@@ -1008,7 +999,6 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
     </div>
   </div>
 
-
   <!-- TERMÉKFEJLESZTÉS -->
   <div class="page" id="page-pl_kpi">
     <div class="gr"><div class="gr-av">A</div><div class="gr-b">Teljesítménymutatók – az aktuális projekt KPI-jainak nyomon követése, célok vs. tényadatok. 🎯</div></div>
@@ -1241,7 +1231,7 @@ function showPage(n){
   if(n==='naptar')renderCal();
   if(n==='elozmeny')renderHistory();
   if(n==='pl_kpi'){ensureServiceCatalog();plRenderKpi();}
-  if(n==='szolgaltatasok'){ensureServiceCatalog();}
+  if(n==='szolgaltatasok')ensureServiceCatalog();
   if(n==='dashboard')updStats();
   if(n==='terkep'){
     if(!mapOK){if(typeof L==='undefined'){document.getElementById('map-cnt').textContent='A térképkönyvtár nem töltődött be';}else{initMap();mapOK=true;setTimeout(()=>lMap.invalidateSize(),180);}}
@@ -3327,12 +3317,18 @@ function plRenderKpi(){
   const serviceHtml=services.filter(e=>e.metric&&(e.metric.name||e.metric.goal)).map(e=>{
     const k=e.metric,status=({concept:'Koncepció',prep:'Előkészítés',dev:'Fejlesztés alatt',live:'Bevezetve',review:'Felülvizsgálat alatt',phaseout:'Kivezetés alatt'})[e.status]||e.status||'–';
     const value=v=>v===0||v==='0'?'0':v===undefined||v===null||v===''?'–':esc(String(v));
+    const history=Array.isArray(e.metricHistory)?e.metricHistory:[];
+    const rows=history.filter(h=>h&&Number.isFinite(Number(h.value))).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||''))).slice(-12);
+    const nums=rows.map(h=>Number(h.value)),min=Math.min(...nums),max=Math.max(...nums),span=max-min||1;
+    const points=nums.map((n,i)=>`${20+(i*320/Math.max(1,nums.length-1))},${95-(n-min)*68/span}`).join(' ');
+    const chart=rows.length>1?`<svg class="history-chart" viewBox="0 0 360 115" preserveAspectRatio="none" role="img" aria-label="Mérési idősor: ${rows.map(h=>`${esc(String(h.date||''))}: ${value(h.value)}`).join(', ')}"><line x1="20" y1="96" x2="342" y2="96" stroke="#d8e2dc"/><polyline fill="none" stroke="#1e7a46" stroke-width="3" points="${points}"/>${nums.map((n,i)=>`<circle cx="${20+(i*320/Math.max(1,nums.length-1))}" cy="${95-(n-min)*68/span}" r="4" fill="#1e7a46"/>`).join('')}</svg>`:'';
+    const historyHtml=rows.length?`<div class="history-list">${rows.slice().reverse().map(h=>`<div><time>${esc(String(h.date||''))}</time><strong>${value(h.value)} ${esc(String(k.unit||''))}</strong><small>${esc(String(h.source||'forrás nincs megadva'))}</small></div>`).join('')}</div>`:'<div class="service-kpi-meta">Még nincs mérési előzmény.</div>';
     return `<div class="pl-card service-kpi-card"><h3>${esc(String(e.name||''))}</h3>
       <div class="service-kpi-meta">Felelős: ${esc(String(e.owner||'nincs megadva'))} · ${esc(status)} · Határidő: ${esc(String(e.deadline||'nincs megadva'))}</div>
       <div class="service-kpi-goal">Cél: ${esc(String(k.goal||'nincs megadva'))}</div>
       <div class="service-kpi-name">${esc(String(k.name||'Nincs mérőszám'))} ${esc(String(k.unit||''))}</div>
       <div class="service-kpi-values"><span>Kiinduló: ${value(k.baseline)}</span><span>Tény: ${value(k.current)}</span><span>Célérték: ${value(k.target)}</span></div>
-      <div class="service-kpi-meta">Mérés: ${esc(String(k.measuredAt||'nincs megadva'))} · Forrás: ${esc(String(k.source||'nincs megadva'))}</div>
+      ${chart}<details class="history-details"><summary>Mérési előzmények (${rows.length})</summary>${historyHtml}</details>
       <button type="button" class="btn btn-s service-open" data-service-id="${esc(String(e.id))}">Adatlap megnyitása →</button></div>`;
   }).join('');
   el.innerHTML=`
@@ -3340,7 +3336,7 @@ function plRenderKpi(){
       ${kpiHtml}
     </div>
     <section class="service-kpi-section"><h3>Szolgáltatásokhoz kapcsolt KPI-k</h3>
-      <p>Ezeket a szolgáltatás-katalógusban szerkesztheted. A KPI-oldal nem tárol másolatot.</p>
+      <p>A mérések a szolgáltatás-katalógusban tárolódnak; itt az idősor és a célérték jelenik meg.</p>
       <div class="service-kpi-grid">${window.abigelServicesError?`<div class="empty-state">${esc(window.abigelServicesError)}</div>`:serviceHtml||(window.abigelServicesReady?'<div class="empty-state">Még nincs szolgáltatás célértékkel vagy mérőszámmal.</div>':'<div class="empty-state">Katalógusadatok betöltése…</div>')}</div>
     </section>
     <div class="pl-card">
