@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Szolgáltatás-katalógus</title>
+<title>TEKNO – Termékfejlesztés Koordináció Nyomon követési és Operatív riportjai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -108,6 +108,42 @@ button,input,select,textarea{font-family:var(--font-sans)}button:focus-visible,i
 .metric-panel,.history-panel{border:1px solid var(--line);border-left:4px solid #2e9d5e;background:var(--panel);padding:16px;margin:16px 0;border-radius:10px}.metric-panel h3,.history-panel h3{font-size:17px;color:var(--ink);margin:0 0 12px}.metric-panel p,.history-panel p{margin:7px 0;color:var(--ink-soft)}.metric-values{display:flex;flex-wrap:wrap;gap:8px;margin:11px 0}.metric-values span{padding:8px 10px;background:#e8f6ed;border-radius:7px;color:#155c34;font-weight:600}.metric-mini,.owner-mini{color:#155c34;font-size:12px;font-weight:600}.form-row{flex-wrap:wrap}.form-row>div{min-width:130px}.form-row input[type=number]{width:100%;font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:9px 10px;border-radius:10px}
 .history-form{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin:12px 0}.history-form>label{flex:1 1 120px;font-size:12px}.history-form input{width:100%!important;min-height:37px}.history-form button{border:0;background:#2e9d5e;color:#fff;border-radius:10px;padding:10px 14px;cursor:pointer}.history-form button:disabled{opacity:.6;cursor:wait}.history-list{max-height:270px;overflow:auto}.history-row{padding:10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.history-row strong{color:#155c34}.history-row small{color:var(--ink-soft)}.history-row button{border:1px solid var(--line);background:var(--panel);color:var(--warn);border-radius:8px;padding:5px 9px;cursor:pointer}.history-chart{width:100%;height:115px;margin:10px 0}
 @media(max-width:700px){header.board{padding:20px 16px}.toolbar{padding:12px 16px}main{padding:18px 16px 48px}.toolbar-inner{gap:8px}.form-row>div{min-width:100%}.row{flex-wrap:wrap}.detail-grid{grid-template-columns:1fr}.stepper{overflow:auto}.entry-actions{flex-wrap:wrap}}
+
+.mainnav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.mainnav a{font-family:var(--font-sans);font-size:14px;font-weight:600;color:var(--board-fg);text-decoration:none;padding:8px 16px;border:1px solid rgba(255,255,255,.3);border-radius:20px}
+.mainnav a.active{background:#fff;color:var(--board-bg)}
+.rp-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;border-bottom:2px solid var(--line)}
+.rp-tabs button{font-family:var(--font-sans);font-size:14px;font-weight:600;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:9px 14px;color:var(--ink-soft);cursor:pointer}
+.rp-tabs button.on{color:var(--ink);border-bottom-color:var(--accent-bike)}
+.rp-filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.rp-filters div{flex:1 1 150px}.rp-filters label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:3px}
+.rp-filters select{width:100%}
+.rp-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.rp-kpis .rp-card{margin-bottom:0}
+.rp-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.rp-card h3{margin:0 0 10px;font-size:15px}
+.rp-kpi .v{font-size:28px;font-weight:700}.rp-kpi .s{font-size:12px;color:var(--ink-soft)}
+.rp-up{color:#1a9b50;font-weight:600}.rp-down{color:#d1332e;font-weight:600}
+.rp-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-bottom:6px}.rp-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.rp-chart{width:100%;height:auto}
+.rp-bar{display:grid;grid-template-columns:150px 1fr 150px;gap:10px;align-items:center;font-size:13px;margin:5px 0}
+.rp-bar .tr{background:var(--bg);border-radius:4px;height:16px;position:relative}.rp-bar .fi{background:var(--accent-bike);height:100%;border-radius:4px}
+.rp-bar .pv{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink-soft)}
+.rp-tbl{overflow:auto}.rp-tbl table{border-collapse:collapse;width:100%;font-size:13px}
+.rp-tbl th,.rp-tbl td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}.rp-tbl th:first-child,.rp-tbl td:first-child{text-align:left}.rp-tbl th{background:var(--bg)}
+.rp-btn{font-family:var(--font-sans);font-size:14px;font-weight:600;background:var(--accent-bike);color:#fff;border:0;border-radius:8px;padding:9px 16px;cursor:pointer}
+.rp-btn.sec{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.rp-note{font-size:12px;color:var(--ink-soft);margin:8px 0}
+.rp-empty{text-align:center;padding:30px;color:var(--ink-soft)}
+.rp-seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:12px}
+.rp-seg button{font-family:var(--font-sans);font-size:13px;font-weight:600;background:var(--panel);color:var(--ink-soft);border:0;padding:8px 14px;cursor:pointer}
+.rp-seg button.on{background:var(--accent-bike);color:#fff}
+.rp-mx input{width:84px;font-family:var(--font-sans);font-size:13px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:5px 6px;text-align:right}
+.rp-mx th{white-space:normal;font-size:12px}.rp-mx td:first-child{white-space:normal;min-width:150px}
+.rp-ptitle{display:none}
+.rp-tot td{font-weight:700;background:var(--bg)}
+@media(max-width:600px){.rp-bar{grid-template-columns:100px 1fr 110px}}
+@media print{@page{size:A4 landscape;margin:10mm}.toolbar,.mainnav,.rp-tabs,.rp-filters,.rp-noprint,.rp-seg,.sync-status{display:none!important}.rp-ptitle{display:block;margin:0 0 10px;font-size:18px}.board{padding:10px 0!important;background:none!important;color:#000!important}.board h1{color:#000!important;font-size:20px}.tagline,.tally{display:none!important}.rp-card{break-inside:avoid;border-color:#bbb}body{background:#fff!important}main{padding:0!important;max-width:none!important}.rp-tbl{overflow:visible}.rp-tbl table{font-size:10px}.rp-pb{page-break-before:always}}
 </style>
 </head>
 <body>
@@ -128,10 +164,12 @@ button,input,select,textarea{font-family:var(--font-sans)}button:focus-visible,i
 <div id="app" style="display:none;">
 <header class="board">
   <div class="board-inner">
-    <h1>Szolgáltatás-katalógus</h1>
+    <h1>TEKNO</h1>
+    <div class="tekno-full" style="font-size:13px;letter-spacing:.3px;opacity:.85;margin:0 0 10px">Termékfejlesztés Koordináció Nyomon követési és Operatív riportjai</div>
     <p class="tagline">Utasélményt érintő szolgáltatásfejlesztési kezdeményezések nyomon követése: kerékpárszállítás, családbarát utazás, akadálymentesítés, utaskomfort és vendéglátás.</p>
     <div class="sync-status"><span class="sync-dot" id="syncDot"></span><span id="syncText">Kapcsolódás…</span></div>
     <div class="tally" id="tally"></div>
+    <nav class="mainnav"><a href="#">Szolgáltatások</a><a href="#riport">Havi riport</a></nav>
   </div>
 </header>
 
@@ -240,6 +278,7 @@ function initFirebase(){
   firebase.initializeApp(firebaseConfig);
   db=firebase.firestore();
   col=db.collection('services');
+  initStats();
   col.onSnapshot(snap=>{
     entries=snap.docs.map(d=>Object.assign({id:d.id},d.data()));
     entries.forEach(e=>{ if(!e.coord) e.coord=[]; if(e.deadline===undefined) e.deadline=''; if(!e.metric)e.metric={}; if(!e.owner)e.owner=''; if(!Array.isArray(e.metricHistory))e.metricHistory=[]; });
@@ -255,7 +294,7 @@ function initFirebase(){
   }, err=>{
     document.getElementById('syncDot').classList.add('off');
     document.getElementById('syncText').textContent='Nincs kapcsolat: '+err.message;
-    sendKpisToAbigel('Nem érhető el a szolgáltatás-katalógus: '+err.message);
+    sendKpisToAbigel('Nem érhető el a TEKNO: '+err.message);
   });
 }
 
@@ -397,7 +436,9 @@ function renderDetailView(id){
 function route(){
   const hash=location.hash;
   const toolbar=document.querySelector('.toolbar');
-  if(hash.indexOf('#/')===0){ toolbar.style.display='none'; renderDetailView(hash.slice(2)); }
+  setNav();
+  if(hash==='#riport'){ toolbar.style.display='none'; renderReport(); }
+  else if(hash.indexOf('#/')===0){ toolbar.style.display='none'; renderDetailView(hash.slice(2)); }
   else{ toolbar.style.display=''; renderListView(); }
 }
 window.addEventListener('hashchange', route);
@@ -457,6 +498,204 @@ document.getElementById('entryForm').addEventListener('submit',(ev)=>{
   document.getElementById('dialog').close();
 });
 document.getElementById('search').addEventListener('input', route);
+
+
+/* ================= HAVI RIPORT ================= */
+const RP_COUNTIES=['Bács-Kiskun','Baranya','Békés','Borsod-Abaúj-Zemplén','Csongrád-Csanád','Fejér','Győr-Moson-Sopron','Hajdú-Bihar','Heves','Jász-Nagykun-Szolnok','Komárom-Esztergom','Nógrád','Pest','Somogy','Szabolcs-Szatmár-Bereg','Tolna','Vas','Veszprém','Zala'];
+const RP_ROUTES=['Balaton','Bakony','Bécs','Békés','Göcsej','Hernád-Zemplén','Kaposvár','Mecsek','Napfény','Nyírség','Tokaj','Tópart'];
+const RP_H6=['Másodosztályú helyjegyek','Első osztályú helyjegyek','Prémium helyjegyek','Kerékpárhelyjegyek','Fekvőhelyek','Hálóhelyek'];
+const RP_NAPM=['Balaton24','Bakony','Mecsek'].concat(RP_COUNTIES.map(c=>c+' Megye24'));
+const RP_CSM=['Másodosztályú helyjegyek','Első osztályú helyjegyek','Prémium helyjegyek','Kerékpárhelyjegyek','Balaton24','Bakony','Mecsek','Megye24'];
+const RP_CH=['Online','Jegypénztár','Automata','Applikáció'];
+const RP_ELM=['Első osztály','Prémium osztály','Kerékpárszállítás','Akadálymentesség','Étkezőkocsi','Fekvőkocsi','Hálókocsi','Utastájékoztatás','WiFi'];
+const RP_TOTAL='Összesen';
+const SECS={
+  ic:{label:'IC',metrics:RP_H6,dims:RP_ROUTES,dl:'Viszonylat'},
+  ec:{label:'EC',metrics:RP_H6,dims:RP_ROUTES,dl:'Viszonylat'},
+  nap:{label:'Napijegyek',metrics:RP_NAPM,dims:[RP_TOTAL],dl:null},
+  csat:{label:'Értékesítési csatorna',metrics:RP_CSM,dims:RP_CH,dl:'Csatorna'},
+  elm:{label:'Szolgáltatás-elmaradás',metrics:RP_ELM,dims:RP_ROUTES,dl:'Viszonylat'}
+};
+const RP_ORDER=['ic','ec','nap','csat','elm'];
+const RP_MON=['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember','Október','November','December'];
+const RP_COL=['#8a8f98','#3b6ea5','#c7862a','#2e9d5e'];
+let statsCol=null, stats=[], statsLocal=false, rpIdx=new Map();
+const _n=new Date();
+const rp={tab:'ic',mode:'view',y:_n.getFullYear(),m:Math.max(1,_n.getMonth()),eY:_n.getFullYear(),eM:Math.max(1,_n.getMonth()),flt:{ic:{metric:'__all',dim:'__all'},ec:{metric:'__all',dim:'__all'},nap:{metric:'__all',dim:'__all'},csat:{metric:'__all',dim:'__all'},elm:{metric:'__all',dim:'__all'}}};
+const rpKey=(sec,y,m,mt,d)=>[sec,y,m,mt,d].join('|');
+function rpId(r){return rpKey(r.sec,r.y,r.m,r.metric,r.dim).replace(/\//g,'-');}
+function rpBuild(){rpIdx=new Map();stats.forEach(r=>rpIdx.set(rpKey(r.sec,r.y,r.m,r.metric,r.dim),Number(r.value)));}
+function initStats(){
+  try{ statsCol=db.collection('ticketReport'); }catch(e){ statsLocal=true; }
+  if(statsCol){
+    statsCol.onSnapshot(snap=>{ statsLocal=false; stats=snap.docs.map(d=>Object.assign({id:d.id},d.data())); rpBuild(); rpRefresh(); },
+      err=>{ statsLocal=true; stats=JSON.parse(localStorage.getItem('ticketReportLocal')||'[]'); rpBuild(); rpRefresh(); });
+  } else { stats=JSON.parse(localStorage.getItem('ticketReportLocal')||'[]'); rpBuild(); }
+}
+function rpRefresh(){ if(location.hash==='#riport' && rp.mode!=='entry') renderReport(); }
+async function rpSave(upserts,deletes){
+  if(statsLocal||!statsCol){
+    const map=new Map(stats.map(r=>[rpId(r),r]));
+    deletes.forEach(r=>map.delete(rpId(r))); upserts.forEach(r=>map.set(rpId(r),Object.assign({id:rpId(r)},r)));
+    stats=[...map.values()]; localStorage.setItem('ticketReportLocal',JSON.stringify(stats)); rpBuild(); return;
+  }
+  const ops=upserts.map(r=>({t:'s',r})).concat(deletes.map(r=>({t:'d',r})));
+  for(let i=0;i<ops.length;i+=400){
+    const b=db.batch();
+    ops.slice(i,i+400).forEach(o=>{const ref=statsCol.doc(rpId(o.r)); if(o.t==='s') b.set(ref,{sec:o.r.sec,y:o.r.y,m:o.r.m,metric:o.r.metric,dim:o.r.dim,value:o.r.value}); else b.delete(ref);});
+    await b.commit();
+  }
+}
+const rpNum=n=>n==null?'–':Math.round(n).toLocaleString('hu-HU');
+function rpSum(sec,y,m,fm,fd){
+  const S=SECS[sec];let s=0,any=false;
+  const ms=fm==='__all'?S.metrics:[fm], ds=(fd==='__all'||S.dims.length===1)?S.dims:[fd];
+  for(const a of ms)for(const d of ds){const v=rpIdx.get(rpKey(sec,y,m,a,d));if(v!==undefined&&!isNaN(v)){s+=v;any=true;}}
+  return any?s:null;
+}
+function rpYtd(sec,y,to,fm,fd){let s=0,any=false;for(let m=1;m<=to;m++){const v=rpSum(sec,y,m,fm,fd);if(v!=null){s+=v;any=true;}}return any?s:null;}
+function rpPct(a,b){return(a==null||!b)?null:(a-b)/b*100;}
+function rpPc(p){if(p==null)return '<span>–</span>';return '<span class="'+(p>=0?'rp-up':'rp-down')+'">'+(p>=0?'▲ +':'▼ ')+p.toFixed(1).replace('.',',')+'%</span>';}
+function rpYears(){const ys=[...new Set(stats.map(r=>r.y))];const cy=new Date().getFullYear();if(!ys.includes(cy))ys.push(cy);return ys.sort((a,b)=>a-b);}
+function rpOpts(list,sel,allLabel){return (allLabel?'<option value="__all"'+(sel==='__all'?' selected':'')+'>'+allLabel+'</option>':'')+list.map(x=>'<option value="'+esc(String(x))+'"'+(String(x)===String(sel)?' selected':'')+'>'+esc(String(x))+'</option>').join('');}
+const rpMonOpts=m=>RP_MON.map((n,i)=>'<option value="'+(i+1)+'"'+(i+1===m?' selected':'')+'>'+n+'</option>').join('');
+function rpTabs(){
+  const t=RP_ORDER.map(k=>[k,SECS[k].label]).concat([['ov','Áttekintő']]);
+  return '<div class="rp-tabs rp-noprint">'+t.map(x=>'<button data-tab="'+x[0]+'" class="'+(rp.tab===x[0]?'on':'')+'">'+x[1]+'</button>').join('')+'</div>';
+}
+function rpLine(series,labels){
+  const W=860,H=300,p={l:62,r:14,t:14,b:28};
+  const all=series.flatMap(s=>s.d).filter(v=>v!=null);const mx=Math.max(...all,1)*1.1;
+  const X=i=>p.l+(W-p.l-p.r)*i/11,Y=v=>p.t+(H-p.t-p.b)*(1-v/mx);
+  let g='';
+  for(let i=0;i<=4;i++){const yy=p.t+(H-p.t-p.b)*i/4;g+='<line x1="'+p.l+'" x2="'+(W-p.r)+'" y1="'+yy+'" y2="'+yy+'" stroke="currentColor" opacity=".12"/><text x="'+(p.l-6)+'" y="'+(yy+4)+'" font-size="11" text-anchor="end" fill="currentColor" opacity=".7">'+rpNum(mx*(1-i/4))+'</text>';}
+  labels.forEach((l,i)=>{g+='<text x="'+X(i)+'" y="'+(H-8)+'" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">'+l+'</text>';});
+  series.forEach(s=>{
+    let d='',st=false;s.d.forEach((v,i)=>{if(v==null){st=false;return;}d+=(st?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)+' ';st=true;});
+    g+='<path d="'+d+'" fill="none" stroke="'+s.c+'" stroke-width="'+s.w+'" stroke-linejoin="round"/>';
+    s.d.forEach((v,i)=>{if(v!=null)g+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="'+(s.w>2?4:2.5)+'" fill="'+s.c+'"><title>'+s.name+' '+labels[i]+': '+rpNum(v)+'</title></circle>';});
+  });
+  return '<svg class="rp-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Havi alakulás">'+g+'</svg>';
+}
+function rpBars(rows,note){
+  const mx=Math.max(...rows.map(r=>Math.max(r.v||0,r.p||0)),1);
+  return '<div class="rp-note">'+note+'</div>'+rows.map(r=>'<div class="rp-bar"><span>'+esc(r.n)+'</span><div class="tr"><div class="fi" style="width:'+((r.v||0)/mx*100)+'%"></div>'+(r.p!=null?'<div class="pv" style="left:'+(r.p/mx*100)+'%"></div>':'')+'</div><span>'+rpNum(r.v)+' '+rpPc(rpPct(r.v,r.p))+'</span></div>').join('');
+}
+function rpSeg(){return '<div class="rp-seg rp-noprint"><button data-mode="view" class="'+(rp.mode==='view'?'on':'')+'">Elemzés</button><button data-mode="entry" class="'+(rp.mode==='entry'?'on':'')+'">Adatfelvitel</button></div>';}
+function renderSection(sec){
+  const S=SECS[sec],F=rp.flt[sec],fm=F.metric,fd=F.dim,y=rp.y,m=rp.m,py=y-1;
+  const cur=rpSum(sec,y,m,fm,fd),prev=rpSum(sec,py,m,fm,fd),yc=rpYtd(sec,y,m,fm,fd),yp=rpYtd(sec,py,m,fm,fd);
+  const prior=[1,2,3].map(i=>rpSum(sec,y-i,m,fm,fd)).filter(v=>v!=null);const avg=prior.length?prior.reduce((a,b)=>a+b,0)/prior.length:null;
+  const ys=rpYears().filter(v=>v<=y).slice(-4);
+  const colFor=i=>RP_COL[Math.max(0,RP_COL.length-ys.length)+i];
+  let h=rpTabs()+rpSeg();
+  h+='<div class="rp-filters rp-noprint"><div><label>Év</label><select id="rpY">'+rpOpts(rpYears(),y)+'</select></div>'
+   +'<div><label>Hónap</label><select id="rpM">'+rpMonOpts(m)+'</select></div>'
+   +'<div><label>Mutató</label><select id="rpMetric">'+rpOpts(S.metrics,fm,'Összes mutató')+'</select></div>'
+   +(S.dl?'<div><label>'+S.dl+'</label><select id="rpDim">'+rpOpts(S.dims,fd,'Összes '+S.dl.toLowerCase())+'</select></div>':'')
+   +'<div style="flex:0 0 auto;align-self:end"><button class="rp-btn sec" onclick="window.print()">PDF / nyomtatás</button></div></div>';
+  if(!stats.length) h+='<div class="rp-card rp-empty"><strong>Még nincs rögzített adat.</strong><br>Az „Adatfelvitel" nézetben vihetők fel az első értékek, vagy CSV-ből importálhatók a korábbi évek (Áttekintő fül).</div>';
+  h+='<div class="rp-card"><h3>'+S.label+' · '+esc(fm==='__all'?'összes mutató':fm)+(S.dl?' · '+esc(fd==='__all'?'összes '+S.dl.toLowerCase():fd):'')+' – '+RP_MON[m-1]+' '+y+'</h3></div>';
+  h+='<div class="rp-kpis">'
+   +'<div class="rp-card rp-kpi"><div class="s">'+RP_MON[m-1]+' '+y+'</div><div class="v">'+rpNum(cur)+'</div><div class="s">előző év: '+rpNum(prev)+' '+rpPc(rpPct(cur,prev))+'</div></div>'
+   +'<div class="rp-card rp-kpi"><div class="s">Január–'+RP_MON[m-1].toLowerCase()+' (YTD)</div><div class="v">'+rpNum(yc)+'</div><div class="s">előző év: '+rpNum(yp)+' '+rpPc(rpPct(yc,yp))+'</div></div>'
+   +'<div class="rp-card rp-kpi"><div class="s">Előző évek átlaga (azonos hónap)</div><div class="v">'+rpNum(avg)+'</div><div class="s">eltérés: '+rpPc(rpPct(cur,avg))+'</div></div></div>';
+  h+='<div class="rp-card"><h3>Havi alakulás – évek összevetése</h3><div class="rp-legend">'+ys.map((yy,i)=>'<span><i style="background:'+colFor(i)+'"></i>'+yy+'</span>').join('')+'</div>'
+   +rpLine(ys.map((yy,i)=>({name:String(yy),c:colFor(i),w:yy===y?3:1.8,d:RP_MON.map((_,k)=>rpSum(sec,yy,k+1,fm,fd))})),RP_MON.map(n=>n.slice(0,3)))+'</div>';
+  const note='A függőleges vonal az előző év azonos hónapjának értéke.';
+  if(fm==='__all'&&S.metrics.length>1) h+='<div class="rp-card"><h3>Megoszlás mutatók szerint – '+RP_MON[m-1]+' '+y+'</h3>'+rpBars(S.metrics.map(a=>({n:a,v:rpSum(sec,y,m,a,fd),p:rpSum(sec,py,m,a,fd)})),note)+'</div>';
+  if(S.dl&&fd==='__all') h+='<div class="rp-card"><h3>Megoszlás – '+S.dl.toLowerCase()+' szerint – '+RP_MON[m-1]+' '+y+'</h3>'+rpBars(S.dims.map(d=>({n:d,v:rpSum(sec,y,m,fm,d),p:rpSum(sec,py,m,fm,d)})),note)+'</div>';
+  h+='<div class="rp-card"><h3>Részletes táblázat</h3><div class="rp-tbl"><table><tr><th>Hónap</th>'+ys.map(v=>'<th>'+v+'</th>').join('')+'<th>Változás az előző évhez</th></tr>';
+  for(let k=1;k<=12;k++)h+='<tr><td>'+RP_MON[k-1]+'</td>'+ys.map(v=>'<td>'+rpNum(rpSum(sec,v,k,fm,fd))+'</td>').join('')+'<td>'+rpPc(rpPct(rpSum(sec,y,k,fm,fd),rpSum(sec,py,k,fm,fd)))+'</td></tr>';
+  h+='</table></div></div><div class="rp-note">Az évek közötti összevetés csak azonos mutatódefiníció mellett megbízható.</div>';
+  return h;
+}
+function renderEntry(sec){
+  const S=SECS[sec],y=rp.eY,m=rp.eM;
+  const ys=[];for(let v=new Date().getFullYear()+1;v>=2015;v--)ys.push(v);
+  return rpTabs()+rpSeg()+'<div class="rp-card"><h3>'+S.label+' – havi adatfelvitel</h3>'
+   +'<div class="rp-filters"><div><label>Év</label><select id="eY">'+rpOpts(ys,y)+'</select></div><div><label>Hónap</label><select id="eM">'+rpMonOpts(m)+'</select></div></div>'
+   +'<div class="rp-note">'+(S.dl?'Add meg a havi értékeket mutatónként és '+S.dl.toLowerCase()+' szerint.':'Ennél a fülnél mutatónként egyetlen havi érték adható meg.')+' Üresen hagyott mező = nincs adat (a korábban mentett érték törlődik).</div>'
+   +'<div class="rp-tbl rp-mx"><table><tr><th>Mutató</th>'+S.dims.map(d=>'<th>'+esc(d)+'</th>').join('')+'</tr>'
+   +S.metrics.map(a=>'<tr><td>'+esc(a)+'</td>'+S.dims.map(d=>{const v=rpIdx.get(rpKey(sec,y,m,a,d));return '<td><input type="number" min="0" step="1" data-metric="'+esc(a)+'" data-dim="'+esc(d)+'" value="'+(v!==undefined?v:'')+'" aria-label="'+esc(a+' '+d)+'"></td>';}).join('')+'</tr>').join('')
+   +'</table></div><p><button class="rp-btn" id="eSave">Mentés</button> <span id="eMsg" class="rp-note"></span></p></div>';
+}
+function ovRow(sec,a,y,m,tot){
+  const py=y-1,c=rpSum(sec,y,m,a,'__all'),p=rpSum(sec,py,m,a,'__all'),yc=rpYtd(sec,y,m,a,'__all'),yp=rpYtd(sec,py,m,a,'__all');
+  return '<tr'+(tot?' class="rp-tot"':'')+'><td>'+(tot?'Összesen':esc(a))+'</td><td>'+rpNum(c)+'</td><td>'+rpNum(p)+'</td><td>'+rpPc(rpPct(c,p))+'</td><td>'+rpNum(yc)+'</td><td>'+rpNum(yp)+'</td><td>'+rpPc(rpPct(yc,yp))+'</td></tr>';
+}
+function ovTable(sec,y,m){
+  const S=SECS[sec];
+  let h='<div class="rp-card"><h3>'+S.label+' – '+RP_MON[m-1]+' '+y+'</h3><div class="rp-tbl"><table><tr><th>Mutató</th><th>'+RP_MON[m-1]+'</th><th>Előző év</th><th>Változás</th><th>YTD</th><th>Előző év YTD</th><th>Változás</th></tr>';
+  S.metrics.forEach(a=>{h+=ovRow(sec,a,y,m,false);});
+  h+=ovRow(sec,'__all',y,m,true)+'</table></div>';
+  if(S.dl){
+    h+='<h3 style="margin-top:14px">'+S.dl+' szerinti bontás – '+RP_MON[m-1]+' '+y+'</h3><div class="rp-tbl"><table><tr><th>Mutató</th>'+S.dims.map(d=>'<th>'+esc(d)+'</th>').join('')+'<th>Összesen</th></tr>';
+    S.metrics.forEach(a=>{h+='<tr><td>'+esc(a)+'</td>'+S.dims.map(d=>'<td>'+rpNum(rpSum(sec,y,m,a,d))+'</td>').join('')+'<td><b>'+rpNum(rpSum(sec,y,m,a,'__all'))+'</b></td></tr>';});
+    h+='<tr class="rp-tot"><td>Összesen</td>'+S.dims.map(d=>'<td>'+rpNum(rpSum(sec,y,m,'__all',d))+'</td>').join('')+'<td>'+rpNum(rpSum(sec,y,m,'__all','__all'))+'</td></tr></table></div>';
+  }
+  return h+'</div>';
+}
+function renderOverview(){
+  const y=rp.y,m=rp.m;
+  let h=rpTabs()+'<div class="rp-filters rp-noprint"><div><label>Év</label><select id="rpY">'+rpOpts(rpYears(),y)+'</select></div><div><label>Hónap</label><select id="rpM">'+rpMonOpts(m)+'</select></div>'
+   +'<div style="flex:0 0 auto;align-self:end"><button class="rp-btn" onclick="window.print()">PDF export</button></div></div>';
+  h+='<div class="rp-ov"><h2 class="rp-ptitle">Havi jegyriport – '+y+'. '+RP_MON[m-1].toLowerCase()+'</h2>';
+  RP_ORDER.forEach((k,i)=>{h+=(i?'<div class="rp-pb"></div>':'')+ovTable(k,y,m);});
+  h+='</div><div class="rp-card rp-noprint"><h3>Adatkezelés (CSV)</h3><div class="rp-note">Oszlopok: szekcio;ev;honap;mutato;dimenzio;ertek – szekció: IC, EC, Napijegyek, Értékesítési csatorna vagy Szolgáltatás-elmaradás; dimenzió: viszonylat, csatorna, a Napijegyeknél „Összesen". Az azonos sor felülíródik.</div>'
+   +'<button class="rp-btn sec" id="eExp">CSV export (összes adat)</button> <button class="rp-btn sec" id="eImpBtn">CSV import</button> <button class="rp-btn sec" id="eTpl">Üres sablon</button><input type="file" id="eImp" accept=".csv" hidden>'
+   +'<div class="rp-note">'+(statsLocal?'⚠ Nincs Firestore-kapcsolat vagy -jogosultság a „ticketReport" gyűjteményhez, ezért az adatok csak ebben a böngészőben tárolódnak.':'Az adatok a közös Firestore-ban („ticketReport" gyűjtemény) tárolódnak, élő szinkronnal.')+' Rögzített sorok: '+stats.length+'. A PDF-hez a böngésző nyomtatási ablakában válaszd a „Mentés PDF-ként" célt.</div></div>';
+  return h;
+}
+function rpDownload(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+text],{type:'text/csv'}));a.download=name;a.click();}
+function bindReport(){
+  const main=document.getElementById('main'),sec=rp.tab;
+  main.querySelectorAll('.rp-tabs button').forEach(b=>b.addEventListener('click',()=>{rp.tab=b.dataset.tab;rp.mode='view';renderReport();}));
+  main.querySelectorAll('.rp-seg button').forEach(b=>b.addEventListener('click',()=>{rp.mode=b.dataset.mode;renderReport();}));
+  const on=(id,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener('change',()=>fn(el.value));};
+  on('rpY',v=>{rp.y=+v;renderReport();});on('rpM',v=>{rp.m=+v;renderReport();});
+  on('rpMetric',v=>{rp.flt[sec].metric=v;renderReport();});on('rpDim',v=>{rp.flt[sec].dim=v;renderReport();});
+  on('eY',v=>{rp.eY=+v;renderReport();});on('eM',v=>{rp.eM=+v;renderReport();});
+  const sv=document.getElementById('eSave');
+  if(sv)sv.addEventListener('click',async()=>{
+    const ups=[],dels=[];
+    main.querySelectorAll('.rp-mx input').forEach(inp=>{
+      const base={sec,y:rp.eY,m:rp.eM,metric:inp.dataset.metric,dim:inp.dataset.dim};
+      if(inp.value!==''&&Number.isFinite(+inp.value))ups.push(Object.assign({value:+inp.value},base));
+      else if(rpIdx.has(rpKey(sec,base.y,base.m,base.metric,base.dim)))dels.push(base);
+    });
+    sv.disabled=true;
+    try{await rpSave(ups,dels);document.getElementById('eMsg').textContent='Mentve: '+ups.length+' érték'+(dels.length?', törölve: '+dels.length:'')+'.';}
+    catch(err){statsLocal=true;await rpSave(ups,dels);document.getElementById('eMsg').textContent='Firestore-hiba ('+err.message+'), helyben mentve.';}
+    sv.disabled=false;
+  });
+  const name2key={};RP_ORDER.forEach(k=>name2key[SECS[k].label]=k);
+  const ex=document.getElementById('eExp');
+  if(ex)ex.addEventListener('click',()=>rpDownload('jegyadatok.csv','szekcio;ev;honap;mutato;dimenzio;ertek\n'+stats.slice().sort((a,b)=>a.y-b.y||a.m-b.m).map(r=>[SECS[r.sec].label,r.y,r.m,r.metric,r.dim,r.value].join(';')).join('\n')));
+  const tp=document.getElementById('eTpl');
+  if(tp)tp.addEventListener('click',()=>{let t='szekcio;ev;honap;mutato;dimenzio;ertek\n';RP_ORDER.forEach(k=>SECS[k].metrics.forEach(a=>SECS[k].dims.forEach(d=>{t+=[SECS[k].label,rp.y,rp.m,a,d,''].join(';')+'\n';})));rpDownload('jegyadatok_sablon.csv',t);});
+  const ib=document.getElementById('eImpBtn'),fi=document.getElementById('eImp');
+  if(ib)ib.addEventListener('click',()=>fi.click());
+  if(fi)fi.addEventListener('change',()=>{
+    const f=fi.files[0];if(!f)return;const rd=new FileReader();
+    rd.onload=async e=>{
+      const lines=e.target.result.replace(/^\ufeff/,'').trim().split(/\r?\n/).slice(1);const ups=[],bad=[];
+      lines.forEach((l,i)=>{const c=l.split(/[;,]/).map(x=>x.trim());if(c.length<6||c[5]==='')return;
+        const k=name2key[c[0]];const o={sec:k,y:+c[1],m:+c[2],metric:c[3],dim:c[4],value:+c[5]};
+        if(!k||!o.y||o.m<1||o.m>12||!SECS[k].metrics.includes(o.metric)||!SECS[k].dims.includes(o.dim)||!Number.isFinite(o.value))bad.push(i+2);else ups.push(o);});
+      if(!ups.length){alert('Nem található érvényes sor.'+(bad.length?' Hibás sorok: '+bad.slice(0,10).join(', '):''));return;}
+      if(!confirm(ups.length+' sor importálása'+(bad.length?' ('+bad.length+' hibás sor kimarad: '+bad.slice(0,10).join(', ')+')':'')+'?'))return;
+      try{await rpSave(ups,[]);}catch(err){alert('Import hiba: '+err.message);return;}
+      renderReport();alert('Import kész: '+ups.length+' sor.');
+    };rd.readAsText(f);fi.value='';
+  });
+}
+function renderReport(){
+  const main=document.getElementById('main');
+  main.innerHTML=rp.tab==='ov'?renderOverview():(rp.mode==='entry'?renderEntry(rp.tab):renderSection(rp.tab));
+  bindReport();
+}
+function setNav(){document.querySelectorAll('.mainnav a').forEach(a=>a.classList.toggle('active',(a.getAttribute('href')==='#riport')===(location.hash==='#riport')));}
 
 fillFormSelects();
 renderChips();
