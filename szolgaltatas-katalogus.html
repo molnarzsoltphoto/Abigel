@@ -453,6 +453,7 @@ function route(){
   const toolbar=document.querySelector('.toolbar');
   setNav();
   if(hash==='#riport'){ toolbar.style.display='none'; renderReport(); }
+  else if(hash==='#viszonylat'){ toolbar.style.display='none'; renderViszonylatiLap(); }
   else if(hash.indexOf('#/')===0){ toolbar.style.display='none'; renderDetailView(hash.slice(2)); }
   else{ toolbar.style.display=''; renderListView(); }
 }
@@ -547,12 +548,12 @@ function initStats(){
       err=>{ statsLocal=true; stats=JSON.parse(localStorage.getItem('ticketReportLocal')||'[]'); rpBuild(); rpRefresh(); });
   } else { stats=JSON.parse(localStorage.getItem('ticketReportLocal')||'[]'); rpBuild(); }
 }
-function rpRefresh(){ if(location.hash==='#riport' && rp.mode!=='entry') renderReport(); }
+function rpRefresh(){ if(location.hash==='#riport' && rp.mode!=='entry') renderReport(); else if(location.hash==='#viszonylat')renderViszonylatiLap(); }
 async function rpSave(upserts,deletes){
   if(statsLocal||!statsCol){
     const map=new Map(stats.map(r=>[rpId(r),r]));
     deletes.forEach(r=>map.delete(rpId(r))); upserts.forEach(r=>map.set(rpId(r),Object.assign({id:rpId(r)},r)));
-    stats=[...map.values()]; localStorage.setItem('ticketReportLocal',JSON.stringify(stats)); rpBuild(); return;
+    stats=[...map.values()]; localStorage.setItem('ticketReportLocal',JSON.stringify(stats)); rpBuild(); rpRefresh(); return;
   }
   const ops=upserts.map(r=>({t:'s',r})).concat(deletes.map(r=>({t:'d',r})));
   for(let i=0;i<ops.length;i+=400){
@@ -710,7 +711,7 @@ function renderReport(){
   main.innerHTML=rp.tab==='ov'?renderOverview():(rp.mode==='entry'?renderEntry(rp.tab):renderSection(rp.tab));
   bindReport();
 }
-function setNav(){document.querySelectorAll('.mainnav a').forEach(a=>a.classList.toggle('active',(a.getAttribute('href')==='#riport')===(location.hash==='#riport')));}
+function setNav(){document.querySelectorAll('.mainnav a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===(location.hash||'#')));}
 
 fillFormSelects();
 renderChips();
