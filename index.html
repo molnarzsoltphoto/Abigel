@@ -640,6 +640,34 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
 /* Horizont – önálló, teljes magasságú nézet az Abigél alkalmazásban. */
 #page-media.active{display:flex;min-height:0;overflow:hidden;padding:0;}
 #horizont-frame{display:block;width:100%;height:100%;min-height:0;border:0;background:#f8faf9;}
+
+.v-sev-row{flex-wrap:wrap;}
+.v-map-toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;font-weight:600;color:var(--gray800);margin-right:10px;}
+.v-map-check{width:16px;height:16px;accent-color:var(--g600);cursor:pointer;}
+
+/* Vonal-dosszié és változásfigyelő */
+.v-change-panel{background:#fff;border:1px solid var(--gray200);border-radius:12px;margin:0 0 16px;padding:13px 15px;}
+.v-change-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.v-change-head h3{margin:0;font-size:15px;color:var(--gray800);}
+.v-change-meta,.v-change-hint{font-size:11px;color:var(--gray600);line-height:1.5;}
+.v-change-panel summary{cursor:pointer;font-size:12px;font-weight:700;padding:9px 0;}
+.v-change-panel ul{margin:0 0 9px;padding-left:20px;font-size:12px;line-height:1.55;}
+.v-change-panel li{padding:3px 0;}
+.v-change-panel li button{border:0;background:none;color:var(--g700);font:inherit;text-align:left;cursor:pointer;text-decoration:underline;}
+.v-change-panel li span{color:var(--gray600);}
+.v-change-panel .v-change-empty{font-size:12px;color:var(--gray600);margin:10px 0 2px;}
+.v-dossier{position:absolute;z-index:650;top:12px;right:12px;bottom:12px;width:min(400px,calc(100% - 24px));overflow:auto;background:#fff;border:1px solid var(--gray200);border-radius:14px;box-shadow:0 10px 38px rgba(0,0,0,.2);padding:18px;}
+.v-dossier[hidden]{display:none;}
+.v-dossier h3{font-size:18px;margin:0 34px 3px 0;line-height:1.3;}
+.v-dossier h4{font-size:13px;margin:19px 0 7px;}
+.v-dossier p{font-size:12px;line-height:1.5;margin:5px 0;color:var(--gray600);}
+.v-dossier .v-d-item{border-top:1px solid var(--gray100);padding:10px 0;}
+.v-dossier .v-d-item strong{font-size:12px;}
+.v-dossier .v-d-item p{white-space:pre-wrap;color:var(--gray800);}
+.v-dossier a{font-size:12px;color:var(--g700);text-decoration:underline;}
+.v-d-close{float:right;background:#fff;border:1px solid var(--gray200);border-radius:8px;width:30px;height:30px;cursor:pointer;}
+.v-d-flag{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:8px;margin:9px 0;font-size:11px;color:#9a3412;}
+@media(max-width:650px){.v-dossier{top:8px;right:8px;bottom:8px;width:calc(100% - 16px);}}
 </style>
 </head>
 <body>
@@ -974,7 +1002,12 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
           <div class="mleg"><div style="width:16px;height:3px;border-radius:2px;background:#f97316;"></div>Közelgő vágányzár</div>
         </div>
       </div>
-      <div id="map"></div>
+      <div id="map" style="position:relative;">
+        <aside id="v-dossier" class="v-dossier" hidden aria-label="Vonal-dosszié">
+          <button type="button" class="v-d-close" id="v-d-close" aria-label="Vonal-dosszié bezárása">×</button>
+          <div id="v-d-content"></div>
+        </aside>
+      </div>
       <div id="map-stat-bar" style="display:none;background:#f8fafc;border-top:1px solid var(--gray100);padding:8px 18px;display:flex;gap:0;flex-direction:column;">
         <!-- Összesített sor -->
         <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding-bottom:6px;border-bottom:1px solid var(--gray100);margin-bottom:6px;">
@@ -1109,6 +1142,10 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
       <button class="btn btn-s" onclick="loadVaganyzar()" id="v-refresh-btn">↻ Frissítés</button>
       <span class="v-ts" id="v-ts">–</span>
     </div>
+    <section class="v-change-panel" aria-label="Vágányzárak változásai">
+      <div class="v-change-head"><h3>Mi változott?</h3><span class="v-change-meta" id="v-change-meta">Az előző ellenőrzés óta</span></div>
+      <div id="v-change-body" aria-live="polite"><p class="v-change-empty">Az első sikeres frissítés után készül összehasonlítás.</p></div>
+    </section>
     <div id="v-empty-state" class="m-empty">
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gray200)" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg>
       <p>Betöltés indítása…</p>
@@ -2137,13 +2174,28 @@ function vtColorFor(cl,status){
   return sev==='kisebb'?'#93c5fd':'#dc2626';
 }
 
+const V_MAP_HIDDEN_KEY='abigel_vaganyzar_hidden_lines';
+function loadVMapHidden(){
+  try {const data=JSON.parse(localStorage.getItem(V_MAP_HIDDEN_KEY)||'[]');return Array.isArray(data)?data:[];}
+  catch(e){return [];}
+}
+function isVLineVisible(line){return !loadVMapHidden().includes(normRef(line));}
+function toggleVLineVisible(line){
+  const key=normRef(line);
+  if(!key)return;
+  const hidden=new Set(loadVMapHidden());
+  if(hidden.has(key))hidden.delete(key);else hidden.add(key);
+  try{localStorage.setItem(V_MAP_HIDDEN_KEY,JSON.stringify([...hidden]));}catch(e){}
+  renderVaganyzar();
+  if(lMap)renderClosureOverlay();
+}
 let vtOverlayVisible=true;
 function toggleVaganyzarOverlay(){
   vtOverlayVisible=!vtOverlayVisible;
   const btn=document.getElementById('btn-vagany');
   if(vtOverlayVisible){
-    btn.style.background='';btn.style.color='';
-    if(vtGeoLayer&&lMap)vtGeoLayer.addTo(lMap);
+    btn.style.background='';btn.style.color='';btn.style.borderColor='';
+    renderClosureOverlay();
   } else {
     btn.style.background='#fee2e2';btn.style.color='#991b1b';btn.style.borderColor='#fca5a5';
     if(vtGeoLayer&&lMap)lMap.removeLayer(vtGeoLayer);
@@ -2163,17 +2215,19 @@ async function renderClosureOverlay(){
 
   // Egy vonalhoz TÖBB vágányzár is tartozhat – Map helyett Map<key, closure[]>
   const lineInfo=new Map();
+  const hiddenLines=new Set(loadVMapHidden());
   src.forEach(function(cl){
     const s=vStatus(cl);
     if(s==='lejart')return;
     const key=normRef(cl.line);
+    if(!key||hiddenLines.has(key))return;
     if(!lineInfo.has(key))lineInfo.set(key,[]);
     lineInfo.get(key).push({status:s,closure:cl});
   });
   // Rendezés: aktív előre
   lineInfo.forEach(function(arr){arr.sort((a,b)=>a.status==='aktiv'?-1:1);});
 
-  if(!lineInfo.size){if(st)st.textContent='ℹ️ Nincs aktív/közelgő vágányzár';return;}
+  if(!lineInfo.size){if(st)st.textContent='ℹ️ Nincs megjeleníthető aktív/közelgő vágányzár';return;}
   vtGeoLayer=L.geoJSON(geo,{
     filter:function(f){return lineInfo.has(normRef(f.properties&&f.properties.ref));},
     style:function(f){
@@ -3044,10 +3098,13 @@ function renderVaganyzar() {
 
   var statusLabel = { aktiv: '🔴 Aktív', hamarosan: '🟡 Hamarosan', lejart: '⚪ Lejárt' };
   var sevMap = loadVSev();
+  var hiddenLines = new Set(loadVMapHidden());
   box.innerHTML = list.map(function(c) {
     var dateRange = (c.startRaw || '?') + ' – ' + (c.endRaw || '?');
     var key = vClosureKey(c);
     var sev = sevMap[key] || '';
+    var lineKey = normRef(c.line);
+    var mapVisible = !hiddenLines.has(lineKey);
     return '<div class="m-card">' +
       '<div class="m-card-head">' +
         '<span class="v-line-badge">' + esc(c.line) + '</span>' +
@@ -3057,6 +3114,7 @@ function renderVaganyzar() {
       '<div class="m-card-summary">' + esc(c.desc.substring(0, 400)) + (c.desc.length > 400 ? '…' : '') + '</div>' +
       (c.status !== 'lejart' ? (
         '<div class="v-sev-row">' +
+          '<label class="v-map-toggle"><input type="checkbox" class="v-map-check" data-line="' + esc(lineKey) + '"' + (mapVisible ? ' checked' : '') + '> Látható a térképen</label>' +
           '<span class="v-sev-lbl">Térkép-jelölés:</span>' +
           '<button class="v-sev-btn jelentos' + (sev === 'jelentos' ? ' sel' : '') + '" data-vk="' + esc(key) + '" data-vv="jelentos">🔴 Jelentős</button>' +
           '<button class="v-sev-btn kisebb' + (sev === 'kisebb' ? ' sel' : '') + '" data-vk="' + esc(key) + '" data-vv="kisebb">🌸 Kisebb</button>' +
@@ -3068,6 +3126,9 @@ function renderVaganyzar() {
       '</div>' +
     '</div>';
   }).join('');
+  box.querySelectorAll('.v-map-check').forEach(function(input){
+    input.addEventListener('change',function(){toggleVLineVisible(input.getAttribute('data-line'));});
+  });
   box.querySelectorAll('.v-sev-btn').forEach(function(btn){
     btn.addEventListener('click', function(){ toggleVSev(btn.getAttribute('data-vk'), btn.getAttribute('data-vv')); });
   });
