@@ -144,6 +144,21 @@ button,input,select,textarea{font-family:var(--font-sans)}button:focus-visible,i
 .rp-tot td{font-weight:700;background:var(--bg)}
 @media(max-width:600px){.rp-bar{grid-template-columns:100px 1fr 110px}}
 @media print{@page{size:A4 landscape;margin:10mm}.toolbar,.mainnav,.rp-tabs,.rp-filters,.rp-noprint,.rp-seg,.sync-status{display:none!important}.rp-ptitle{display:block;margin:0 0 10px;font-size:18px}.board{padding:10px 0!important;background:none!important;color:#000!important}.board h1{color:#000!important;font-size:20px}.tagline,.tally{display:none!important}.rp-card{break-inside:avoid;border-color:#bbb}body{background:#fff!important}main{padding:0!important;max-width:none!important}.rp-tbl{overflow:visible}.rp-tbl table{font-size:10px}.rp-pb{page-break-before:always}}
+
+/* Viszonylati terméklap */
+.vp-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin:0 0 16px;}
+.vp-card h2{font-size:22px;margin:0 0 8px;}.vp-card h3{font-size:16px;margin:0 0 12px;}
+.vp-card p{color:var(--ink-soft);font-size:13px;margin:8px 0;line-height:1.55;}
+.vp-controls{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px;}
+.vp-controls label{font-size:12px;font-weight:600;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px;min-width:130px;}
+.vp-controls select{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:7px;padding:8px;}
+.vp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.vp-box{border:1px solid var(--line);border-radius:9px;padding:12px;background:var(--bg);}
+.vp-box span{display:block;color:var(--ink-soft);font-size:12px;}.vp-box strong{font-size:20px;}
+.vp-card table{border-collapse:collapse;width:100%;font-size:13px;}.vp-card th,.vp-card td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:right;}
+.vp-card th:first-child,.vp-card td:first-child{text-align:left;}.vp-scroll{overflow-x:auto;}
+.vp-card a{color:var(--accent-bike);}.vp-muted{color:var(--ink-soft);}
+@media print{.vp-controls{display:none!important}.vp-card{break-inside:avoid;}}
 </style>
 </head>
 <body>
@@ -169,7 +184,7 @@ button,input,select,textarea{font-family:var(--font-sans)}button:focus-visible,i
     <p class="tagline">Utasélményt érintő szolgáltatásfejlesztési kezdeményezések nyomon követése: kerékpárszállítás, családbarát utazás, akadálymentesítés, utaskomfort és vendéglátás.</p>
     <div class="sync-status"><span class="sync-dot" id="syncDot"></span><span id="syncText">Kapcsolódás…</span></div>
     <div class="tally" id="tally"></div>
-    <nav class="mainnav"><a href="#">Szolgáltatások</a><a href="#riport">Havi riport</a></nav>
+    <nav class="mainnav"><a href="#">Szolgáltatások</a><a href="#riport">Havi riport</a><a href="#viszonylat">Viszonylati terméklap</a></nav>
   </div>
 </header>
 
