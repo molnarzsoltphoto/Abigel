@@ -71,9 +71,26 @@
     p._v2 = 2;
     return p;
   }
+  // A Firebase RTDB az üres tömböket és objektumokat eldobja, ezért minden rajzolás előtt kipótoljuk a hiányzó mezőket.
+  function ensure(p) {
+    migrate(p);
+    p.problem = Object.assign({ statement: "", affectedWho: "", region: "", currentSolution: "", whyNeeded: "", goal: "", deadline: "", orgsInvolved: "" }, p.problem || {});
+    for (const k of ["validation", "segments", "kpis", "partners", "benchmarks", "proposals", "gateLog"]) if (!Array.isArray(p[k])) p[k] = p[k] && typeof p[k] === "object" ? Object.values(p[k]) : [];
+    if (!Array.isArray(p.journey) || p.journey.length !== STAGES.length) { const old = Array.isArray(p.journey) ? p.journey : Object.values(p.journey || {}); p.journey = STAGES.map((st, i) => Object.assign({ stage: st, painPoint: "", severity: "", opportunity: "", kpi: "", complaints: 0 }, old.find((j) => j && j.stage === st) || old[i] || {})); }
+    p.bizcase = Object.assign({ background: "", proposal: "", alternatives: "", risks: "", notes: "" }, p.bizcase || {});
+    p.bizcase.model = Object.assign({ capex: 0, opexYear: 0, paxYear: 0, revPerPax: 0, savingYear: 0, horizon: 5, discount: 5, rampUp: 60 }, p.bizcase.model || {});
+    p.bizcase.tekno ||= {};
+    p.pilot = Object.assign({ hypothesis: "", metric: "", baseline: "", effect: "", control: "", duration: "", location: "", period: "", success: "", stop: "", decisionDate: "", decider: "", outcome: "", sampleBaselinePct: "", sampleEffectPp: "" }, p.pilot || {});
+    p.priority = Object.assign({ impact: 5, effort: 5 }, p.priority || {});
+    if (!LC.includes(p.lifecycle)) p.lifecycle = "ÖTLET";
+    if (!p.gateLog.length) p.gateLog.push({ from: null, to: p.lifecycle, at: p.createdAt || new Date().toISOString(), by: "", note: "" });
+    p.validation.forEach((v) => Object.assign(v, { source: v.source || "", verifiedBy: v.verifiedBy || "", verifiedAt: v.verifiedAt || "", ifFalse: v.ifFalse || "", risk: v.risk || "közepes", status: v.status || "nyitott", type: VTYPES.includes(v.type) ? v.type : "FELTÉTELEZÉS" }));
+    return p;
+  }
   function migrateAll() {
-    S().projects ||= [];
-    S().projects.forEach(migrate);
+    if (!Array.isArray(S().projects)) S().projects = S().projects && typeof S().projects === "object" ? Object.values(S().projects) : [];
+    S().projects = S().projects.filter((p) => p && typeof p === "object");
+    S().projects.forEach(ensure);
     S().kb2 ||= [];
     if (!S().currentProjectId && S().projects.length) S().currentProjectId = S().projects[0].id;
   }
@@ -272,6 +289,10 @@
   function render() {
     const root = document.getElementById("pl-kpi-content");
     if (!root) return;
+    try { renderInner(root); }
+    catch (e) { root.innerHTML = `<div class="pl-card"><b>⚠️ A Termékfejlesztés modul hibára futott</b><div style="font-size:12.5px;margin-top:6px;white-space:pre-wrap">${E(e && e.stack ? e.stack.split("\n").slice(0, 3).join("\n") : String(e))}</div><div style="font-size:12px;color:var(--gray600);margin-top:8px">Küldd el ezt a szöveget, és javítom.</div></div>`; console.error(e); }
+  }
+  function renderInner(root) {
     migrateAll();
     const p = cur();
     const tab = S().pl2Tab || 0;
@@ -655,7 +676,7 @@
     const btn = document.querySelector(`.nb[onclick="showPage('pl_kpi')"]`);
     if (btn) btn.childNodes.forEach((n) => { if (n.nodeType === 3 && n.textContent.trim()) n.textContent = " Termékfejlesztés"; });
     const gr = document.querySelector("#page-pl_kpi .gr-b");
-    if (gr) gr.textContent = "Termékfejlesztés – portfólió, döntési kapuk naplóval, forrásolt validáció, számszerű üzleti eset, pilot-mérési terv, verziózott előterjesztés. (modul v2.1)";
+    if (gr) gr.textContent = "Termékfejlesztés – portfólió, döntési kapuk naplóval, forrásolt validáció, számszerű üzleti eset, pilot-mérési terv, verziózott előterjesztés. (modul v2.2)";
     const st = document.createElement("style");
     st.textContent = `#pl-kpi-content input,#pl-kpi-content select,#pl-kpi-content textarea{font-family:var(--font);font-size:12.5px;border:1.5px solid var(--gray200);border-radius:7px;padding:6px 9px;width:100%;box-sizing:border-box;background:#fff}#pl-kpi-content .pl-form-row{margin-bottom:8px}#pl-kpi-content .pl-form-row label{display:block;font-size:11px;color:var(--gray600);margin-bottom:3px}#pl-kpi-content table th,#pl-kpi-content table td{padding:6px 8px;border-bottom:1px solid var(--gray100);text-align:left}#pl-kpi-content .pl-ai-out{white-space:pre-wrap;font-size:13px;line-height:1.55}#pl-kpi-content .pl-tab{cursor:pointer}#pl-kpi-content .pl-inline select,#pl-kpi-content .pl-inline input{width:auto}`;
     document.head.append(st);
