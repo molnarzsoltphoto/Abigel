@@ -266,7 +266,7 @@
   const pill = (txt, cls = "info") => `<span class="pl-pill ${cls}">${E(txt)}</span>`;
   const typeCls = { "TÉNY": "good", "FELTÉTELEZÉS": "warn", "HIPOTÉZIS": "info", "BECSLÉS": "warn" };
   const riskCls = { magas: "bad", "közepes": "warn", alacsony: "good" };
-  const TABS = ["Portfólió", "Projekt", "Validáció", "Utazási lánc", "Üzleti eset", "Pilot", "KPI", "Benchmark", "Előterjesztés", "Partnerek", "Tudásbázis"];
+  const TABS = ["Portfólió", "Projekt", "Validáció", "Utazási lánc", "Üzleti eset", "Pilot", "KPI", "Benchmark", "Előterjesztés", "Partnerek", "Tudásbázis", "Menetrendszerűség"];
 
   function render() {
     const root = document.getElementById("pl-kpi-content");
@@ -282,7 +282,7 @@
       ${p ? `<span class="pl-pill info">${E(p.lifecycle)}</span><span class="small" style="font-size:12px;color:var(--gray600)">Döntési érettség: <b>${maturity(p).pct}%</b></span>` : ""}
     </div>
     <div class="pl-tab-bar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${TABS.map((t, i) => `<button class="pl-tab${i === tab ? " active" : ""}" onclick="PL2.tab(${i})">${t}</button>`).join("")}</div>`;
-    const body = !p && tab !== 0 && tab !== 10 ? '<div class="empty-state">Nincs projekt. Hozz létre egyet.</div>' : [tabPortfolio, tabProject, tabValidation, tabJourney, tabBiz, tabPilot, tabKpi, tabBench, tabProposal, tabPartners, tabKB][tab](p);
+    const body = !p && tab !== 0 && tab !== 10 && tab !== 11 ? '<div class="empty-state">Nincs projekt. Hozz létre egyet.</div>' : [tabPortfolio, tabProject, tabValidation, tabJourney, tabBiz, tabPilot, tabKpi, tabBench, tabProposal, tabPartners, tabKB, tabPunct][tab](p);
     root.innerHTML = header + body;
   }
 
@@ -411,6 +411,61 @@
       <div style="display:grid;grid-template-columns:2fr 1fr 2fr;gap:8px"><input id="pl2-kb-title" placeholder="Cím"><select id="pl2-kb-cat"><option>Stratégia</option><option>Szabályozás</option><option>Díjszabás</option><option>Kutatás</option><option>Benchmark</option><option>Előterjesztés</option><option>Egyéb</option></select><input id="pl2-kb-url" placeholder="URL (opcionális)"></div><textarea id="pl2-kb-text" rows="6" placeholder="Beillesztett szöveg…" style="width:100%;margin-top:8px"></textarea><button class="btn btn-p" style="margin-top:8px" onclick="PL2.kbAdd()">Hozzáadás</button></div>${rows || '<div class="empty-state">Nincs dokumentum.</div>'}`;
   }
 
+
+  // 12 Menetrendszerűség (abigel-stats / data/pontossag.json)
+  const PUNCT_URL = "https://raw.githubusercontent.com/molnarzsoltphoto/abigel-stats/main/data/pontossag.json";
+  let punct = { data: null, error: null, loading: false, gran: "nap", seg: "", line: "", metric: "pct" };
+  function isoWeek(d) { const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day); const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return t.getUTCFullYear() + "-W" + String(Math.ceil(((t - y0) / 86400000 + 1) / 7)).padStart(2, "0"); }
+  function periodKey(datum, gran) { if (gran === "nap") return datum; if (gran === "hónap") return datum.slice(0, 7); return isoWeek(new Date(datum)); }
+  function lineLabel(r) { return r.vonal ? `${r.vonal} · ${r.viszonylat}` : r.viszonylat; }
+  function puncRows() {
+    const rows = punct.data?.napok || [];
+    return rows.filter((r) => (!punct.seg || r.szegmens === punct.seg) && (!punct.line || lineLabel(r) === punct.line));
+  }
+  // súlyozott összesítés egy csoportra (vonatszámmal súlyozva)
+  function fold(list) {
+    const n = list.reduce((a, r) => a + r.vonatok, 0);
+    if (!n) return null;
+    const ontime = list.reduce((a, r) => a + (r.menetrendszeru_pct / 100) * r.vonatok, 0);
+    const late = list.reduce((a, r) => a + (1 - r.menetrendszeru_pct / 100) * r.vonatok, 0);
+    const avg = late ? list.reduce((a, r) => a + r.atlag_keses_percben * (1 - r.menetrendszeru_pct / 100) * r.vonatok, 0) / late : 0;
+    return { vonatok: n, pct: Math.round((1000 * ontime) / n) / 10, atlag: Math.round(avg * 10) / 10, p90: Math.max(...list.map((r) => r.p90_keses)), max: Math.max(...list.map((r) => r.max_keses)) };
+  }
+  function tabPunct() {
+    if (!punct.data && !punct.loading && !punct.error) PL2.punctLoad();
+    const rows = puncRows();
+    const segs = [...new Set((punct.data?.napok || []).map((r) => r.szegmens))].sort();
+    const lines = [...new Set((punct.data?.napok || []).filter((r) => !punct.seg || r.szegmens === punct.seg).map(lineLabel))].sort((a, b) => a.localeCompare(b, "hu"));
+    const head = `<div class="pl-card" style="margin-bottom:12px"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center" class="pl-inline">
+      <select onchange="PL2.punctSet('gran',this.value)">${["nap", "hét", "hónap"].map((g) => `<option${punct.gran === g ? " selected" : ""}>${g}</option>`).join("")}</select>
+      <select onchange="PL2.punctSet('seg',this.value)"><option value="">minden szegmens</option>${segs.map((g) => `<option value="${E(g)}"${punct.seg === g ? " selected" : ""}>${E(g)}</option>`).join("")}</select>
+      <select onchange="PL2.punctSet('line',this.value)" style="max-width:360px"><option value="">minden vonal / viszonylat</option>${lines.map((g) => `<option value="${E(g)}"${punct.line === g ? " selected" : ""}>${E(g)}</option>`).join("")}</select>
+      <select onchange="PL2.punctSet('metric',this.value)"><option value="pct"${punct.metric === "pct" ? " selected" : ""}>menetrendszerű %</option><option value="atlag"${punct.metric === "atlag" ? " selected" : ""}>átlagos késés (későknél, perc)</option><option value="p90"${punct.metric === "p90" ? " selected" : ""}>90. percentilis késés</option></select>
+      <button class="btn btn-s" onclick="PL2.punctLoad(true)">Frissítés</button>
+      <span style="font-size:11.5px;color:var(--gray400)">${punct.data ? "adat: " + E((punct.data.frissitve || "").slice(0, 16).replace("T", " ")) + " · menetrendszerű = legfeljebb " + punct.data.menetrendszeru_kuszob_perc + " perc" : punct.loading ? "betöltés…" : punct.error ? "⚠️ " + E(punct.error) : ""}</span></div>
+      <p style="font-size:11.5px;color:var(--gray400);margin:8px 0 0">Forrás: holavonat.is, 20 perces mintavétel; egy vonat naponta egyszer, az utolsó megfigyelt késésével számít (nem végállomási). Szegmens és vonalszám a vonatnévből és a végpontokból becsült. Az adat a gyűjtő bekapcsolásától gyűlik.</p></div>`;
+    if (!rows.length) return head + `<div class="empty-state">${punct.loading ? "Betöltés…" : punct.error ? "Nem érhető el az adat." : "Még nincs adat ehhez a szűréshez."}</div>`;
+    // időszakonként
+    const byP = {};
+    rows.forEach((r) => (byP[periodKey(r.datum, punct.gran)] ||= []).push(r));
+    const periods = Object.keys(byP).sort().slice(-40).map((k) => ({ k, ...fold(byP[k]) }));
+    const val = (x) => (punct.metric === "pct" ? x.pct : punct.metric === "atlag" ? x.atlag : x.p90);
+    const maxV = punct.metric === "pct" ? 100 : Math.max(1, ...periods.map(val));
+    const W = 760, H = 220, bw = Math.max(6, Math.floor((W - 50) / periods.length) - 3);
+    const bars = periods.map((x, i) => { const v = val(x), h = Math.round(((H - 40) * v) / maxV), xx = 40 + i * (bw + 3), col = punct.metric === "pct" ? (v >= 90 ? "var(--g500)" : v >= 75 ? "var(--orange)" : "var(--red)") : "var(--g500)";
+      return `<rect x="${xx}" y="${H - 25 - h}" width="${bw}" height="${h}" fill="${col}" rx="2"><title>${E(x.k)}: ${v}${punct.metric === "pct" ? "%" : " perc"} · ${x.vonatok} vonat</title></rect>${bw >= 22 ? `<text x="${xx + bw / 2}" y="${H - 30 - h}" font-size="9" text-anchor="middle" fill="var(--gray600)">${v}</text>` : ""}${i % Math.ceil(periods.length / 8) === 0 ? `<text x="${xx + bw / 2}" y="${H - 10}" font-size="9" text-anchor="middle" fill="var(--gray400)">${E(x.k.slice(punct.gran === "nap" ? 5 : 0))}</text>` : ""}`; }).join("");
+    const chart = `<div class="pl-card" style="margin-bottom:12px"><h3>${punct.gran === "nap" ? "Naponta" : punct.gran === "hét" ? "Hetente" : "Havonta"} · ${punct.seg || "minden szegmens"} · ${punct.line || "minden vonal"}</h3><svg viewBox="0 0 ${W} ${H}" style="width:100%"><line x1="40" y1="${H - 25}" x2="${W}" y2="${H - 25}" stroke="var(--gray200)"/>${punct.metric === "pct" ? `<line x1="40" y1="${H - 25 - (H - 40) * 0.9}" x2="${W}" y2="${H - 25 - (H - 40) * 0.9}" stroke="var(--gray200)" stroke-dasharray="3 3"/><text x="0" y="${H - 22 - (H - 40) * 0.9}" font-size="9" fill="var(--gray400)">90%</text>` : ""}${bars}</svg></div>`;
+    // vonalak az időszakban
+    const byL = {};
+    rows.forEach((r) => (byL[lineLabel(r)] ||= []).push(r));
+    const lineRows = Object.entries(byL).map(([k, l]) => ({ k, ...fold(l) })).filter((x) => x.vonatok >= 3).sort((a, b) => a.pct - b.pct).slice(0, 40);
+    const bySeg = {};
+    rows.forEach((r) => (bySeg[r.szegmens] ||= []).push(r));
+    const segRows = Object.entries(bySeg).map(([k, l]) => ({ k, ...fold(l) })).sort((a, b) => b.vonatok - a.vonatok);
+    const tbl = (list, label) => `<table style="width:100%;font-size:12.5px"><thead><tr><th>${label}</th><th>Vonat</th><th>Menetrendszerű</th><th>Átl. késés (késők)</th><th>p90</th><th>Max</th></tr></thead><tbody>${list.map((x) => `<tr><td>${E(x.k)}</td><td>${x.vonatok}</td><td><span class="pl-pill ${x.pct >= 90 ? "good" : x.pct >= 75 ? "warn" : "bad"}">${x.pct}%</span></td><td>${x.atlag} perc</td><td>${x.p90}</td><td>${x.max}</td></tr>`).join("")}</tbody></table>`;
+    return head + chart + `<div style="display:grid;grid-template-columns:1fr 2fr;gap:12px"><div class="pl-card"><h3>Szegmensenként</h3>${tbl(segRows, "Szegmens")}</div><div class="pl-card"><h3>Vonalak a legrosszabbtól (legalább 3 vonat)</h3>${tbl(lineRows, "Vonal · viszonylat")}</div></div>`;
+  }
+
   // ── műveletek ──
   function setPath(obj, path, val) {
     const ks = path.split("."), last = ks.pop();
@@ -515,6 +570,14 @@
     },
     kbDel(i) { S().kb2.splice(i, 1); try { localStorage.setItem("abigel_state", JSON.stringify(STATE)); } catch (_) {} render(); },
     kbPin(i) { S().kb2[i].pinned = !S().kb2[i].pinned; try { localStorage.setItem("abigel_state", JSON.stringify(STATE)); } catch (_) {} render(); },
+    punctSet(k, v) { punct[k] = v; if (k === "seg") punct.line = ""; render(); },
+    async punctLoad(force) {
+      if (punct.loading) return;
+      punct.loading = true; punct.error = null; render();
+      try { const r = await fetch(PUNCT_URL + (force ? "?t=" + Date.now() : ""), { cache: "no-store" }); if (!r.ok) throw new Error("HTTP " + r.status + (r.status === 404 ? " – a gyűjtő még nem futott, vagy nincs a main ágon" : "")); punct.data = await r.json(); }
+      catch (e) { punct.error = e.message; }
+      punct.loading = false; render();
+    },
     _test: { migrate, calcBiz, sensitivity, sampleSize, importComplaints, gateCheck, maturity, LC, STAGES },
   });
 
