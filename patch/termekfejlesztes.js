@@ -488,8 +488,8 @@
         token = j.nextPageToken || "";
       } while (token);
       TEKNO.rows = rows;
-    } catch (e) { TEKNO.error = e.message; TEKNO.rows = TEKNO.rows || []; }
-    TEKNO.loading = false;
+    } catch (e) { TEKNO.error = (e && e.name === "TimeoutError") ? "időtúllépés (20 s) a firestore.googleapis.com felé" : (e.message || String(e)); TEKNO.rows = TEKNO.rows || []; }
+    finally { TEKNO.loading = false; }
     return TEKNO.rows;
   }
   // utolsó 12 lezárt hónap összege egy mutatóra (és opcionálisan viszonylatra); visszaadja a hónapok számát is
@@ -502,7 +502,7 @@
   function teknoPanel(p) {
     const rows = TEKNO.rows;
     const sel = p.bizcase.tekno || {};
-    if (!rows) { if (!TEKNO.loading) teknoLoad().then(render); return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO jegyriportból</h3><div class="small" style="font-size:12.5px">${TEKNO.error ? "⚠️ " + E(TEKNO.error) : "Betöltés…"}</div></div>`; }
+    if (!rows) { if (!TEKNO.loading) teknoLoad().then(render, (e) => { TEKNO.error = e.message; TEKNO.rows = []; render(); }); return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO jegyriportból</h3><div class="small" style="font-size:12.5px">${TEKNO.error ? "⚠️ " + E(TEKNO.error) : "Betöltés…"}</div></div>`; }
     const secs = [...new Set(rows.map((r) => r.sec))];
     const metrics = [...new Set(rows.filter((r) => r.sec === (sel.sec || secs[0])).map((r) => r.metric))];
     const dims = [...new Set(rows.filter((r) => r.sec === (sel.sec || secs[0])).map((r) => r.dim))].filter(Boolean);
@@ -639,9 +639,10 @@
     async punctLoad(force) {
       if (punct.loading) return;
       punct.loading = true; punct.error = null; render();
-      try { const r = await fetch(PUNCT_URL + (force ? "?t=" + Date.now() : ""), { cache: "no-store" }); if (!r.ok) throw new Error("HTTP " + r.status + (r.status === 404 ? " – a gyűjtő még nem futott, vagy nincs a main ágon" : "")); punct.data = await r.json(); }
-      catch (e) { punct.error = e.message; }
-      punct.loading = false; render();
+      try { const r = await fetch(PUNCT_URL + "?t=" + Math.floor(Date.now() / 300000), { cache: "no-store", signal: AbortSignal.timeout(20000) }); if (!r.ok) throw new Error("HTTP " + r.status + (r.status === 404 ? " – a gyűjtő még nem futott, vagy nincs a main ágon" : "")); punct.data = await r.json(); }
+      catch (e) { punct.error = (e && e.name === "TimeoutError") ? "időtúllépés (20 s)" : (e.message || String(e)); }
+      finally { punct.loading = false; }
+      render();
     },
     _test: { migrate, calcBiz, sensitivity, sampleSize, importComplaints, gateCheck, maturity, LC, STAGES },
   });
@@ -654,7 +655,7 @@
     const btn = document.querySelector(`.nb[onclick="showPage('pl_kpi')"]`);
     if (btn) btn.childNodes.forEach((n) => { if (n.nodeType === 3 && n.textContent.trim()) n.textContent = " Termékfejlesztés"; });
     const gr = document.querySelector("#page-pl_kpi .gr-b");
-    if (gr) gr.textContent = "Termékfejlesztés – portfólió, döntési kapuk naplóval, forrásolt validáció, számszerű üzleti eset, pilot-mérési terv, verziózott előterjesztés.";
+    if (gr) gr.textContent = "Termékfejlesztés – portfólió, döntési kapuk naplóval, forrásolt validáció, számszerű üzleti eset, pilot-mérési terv, verziózott előterjesztés. (modul v2.1)";
     const st = document.createElement("style");
     st.textContent = `#pl-kpi-content input,#pl-kpi-content select,#pl-kpi-content textarea{font-family:var(--font);font-size:12.5px;border:1.5px solid var(--gray200);border-radius:7px;padding:6px 9px;width:100%;box-sizing:border-box;background:#fff}#pl-kpi-content .pl-form-row{margin-bottom:8px}#pl-kpi-content .pl-form-row label{display:block;font-size:11px;color:var(--gray600);margin-bottom:3px}#pl-kpi-content table th,#pl-kpi-content table td{padding:6px 8px;border-bottom:1px solid var(--gray100);text-align:left}#pl-kpi-content .pl-ai-out{white-space:pre-wrap;font-size:13px;line-height:1.55}#pl-kpi-content .pl-tab{cursor:pointer}#pl-kpi-content .pl-inline select,#pl-kpi-content .pl-inline input{width:auto}`;
     document.head.append(st);
