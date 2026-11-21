@@ -4649,50 +4649,59 @@ syncFromFirebase();
   }
 
 
-  // ── TEKNO havi jegyriport (Firestore REST, csak olvasás) ──
-  const TEKNO = { project: "termekfejlesztes-1ba4e", key: "AIzaSyCNZTo0ABgE8eZ8KMgfKr4fQsGLW0jT_zA", rows: null, loading: false, error: null };
-  const TEKNO_SEC = { ic: "IC", ec: "EC", nap: "Napijegyek", csat: "Értékesítési csatorna", elm: "Szolgáltatás-elmaradás" };
-  const fsVal = (v) => v == null ? null : "integerValue" in v ? +v.integerValue : "doubleValue" in v ? +v.doubleValue : "stringValue" in v ? v.stringValue : "booleanValue" in v ? v.booleanValue : null;
+  // ── TEKNO havi riport (a havi-riport.html beágyazott havi összesítője, csak olvasás) ──
+  // A riport mentésekor a szerkesztő egy kis JSON-blokkot is ír (riport-summary): szekció → mutató × dimenzió × hónap.
+  const TEKNO = { rows: null, meta: null, loading: false, error: null };
+  const TEKNO_SEC = {};
+  const teknoUrl = () => (typeof TEKNO_RIPORT_URL === "string" ? TEKNO_RIPORT_URL : "https://molnarzsoltphoto.github.io/termekfejlesztes/havi-riport.html");
   async function teknoLoad(force) {
     if (TEKNO.rows && !force) return TEKNO.rows;
     if (TEKNO.loading) return null;
     TEKNO.loading = true; TEKNO.error = null;
     try {
-      const rows = []; let token = "";
-      do {
-        const u = `https://firestore.googleapis.com/v1/projects/${TEKNO.project}/databases/(default)/documents/ticketReport?pageSize=1000${token ? "&pageToken=" + encodeURIComponent(token) : ""}&key=${TEKNO.key}`;
-        const r = await fetch(u, { signal: AbortSignal.timeout(20000) });
-        if (!r.ok) throw new Error("Firestore " + r.status + (r.status === 403 ? " – a TEKNO olvasási szabálya tiltja" : ""));
-        const j = await r.json();
-        for (const d of j.documents || []) { const f = d.fields || {}; rows.push({ sec: fsVal(f.sec), y: +fsVal(f.y), m: +fsVal(f.m), metric: fsVal(f.metric), dim: fsVal(f.dim), value: +fsVal(f.value) || 0 }); }
-        token = j.nextPageToken || "";
-      } while (token);
+      const r = await fetch(teknoUrl() + (force ? "?t=" + Date.now() : ""), { signal: AbortSignal.timeout(45000), cache: force ? "reload" : "default" });
+      if (!r.ok) throw new Error("A riport nem érhető el (HTTP " + r.status + ")");
+      const html = await r.text();
+      const m = html.match(/<script type="application\/json" id="riport-summary">([\s\S]*?)<\/script>/);
+      const sum = m ? JSON.parse(m[1]) : null;
+      if (!sum || !sum.secs) throw new Error("A riport még nem tartalmaz havi összesítőt – mentsd újra a szerkesztőből");
+      const rows = [];
+      for (const [sec, s] of Object.entries(sum.secs)) {
+        TEKNO_SEC[sec] = s.label;
+        for (const [k, mi, di, v] of s.rows) {
+          if (k > (s.lastComplete || 999999)) continue;   // csak lezárt hónap
+          rows.push({ sec, y: Math.floor(k / 100), m: k % 100, metric: s.metrics[mi], dim: s.dims[di], value: v });
+        }
+      }
       TEKNO.rows = rows;
-    } catch (e) { TEKNO.error = (e && e.name === "TimeoutError") ? "időtúllépés (20 s) a firestore.googleapis.com felé" : (e.message || String(e)); TEKNO.rows = TEKNO.rows || []; }
+      TEKNO.meta = { from: sum.from, to: sum.to, generated: sum.generated };
+    } catch (e) { TEKNO.error = (e && e.name === "TimeoutError") ? "időtúllépés (45 s) a riport letöltésénél" : (e.message || String(e)); TEKNO.rows = TEKNO.rows || []; }
     finally { TEKNO.loading = false; }
     return TEKNO.rows;
   }
-  // utolsó 12 lezárt hónap összege egy mutatóra (és opcionálisan viszonylatra); visszaadja a hónapok számát is
+  // utolsó 12 lezárt hónap összege egy mutatóra (és opcionálisan dimenzióra); visszaadja a hónapok számát is
   function teknoSum(rows, sec, metric, dim) {
     const keys = [...new Set(rows.filter((r) => r.sec === sec && r.metric === metric && (!dim || r.dim === dim)).map((r) => r.y * 100 + r.m))].sort((a, b) => b - a).slice(0, 12);
     const sel = rows.filter((r) => r.sec === sec && r.metric === metric && (!dim || r.dim === dim) && keys.includes(r.y * 100 + r.m));
     return { sum: sel.reduce((a, r) => a + r.value, 0), months: keys.length, from: keys.length ? Math.min(...keys) : null, to: keys.length ? Math.max(...keys) : null };
   }
+  const teknoSecOf = (rows, sel) => { const secs = [...new Set(rows.map((r) => r.sec))]; return secs.includes(sel.sec) ? sel.sec : secs[0]; };
   const ym = (k) => k ? `${Math.floor(k / 100)}. ${String(k % 100).padStart(2, "0")}.` : "–";
   function teknoPanel(p) {
     const rows = TEKNO.rows;
     const sel = p.bizcase.tekno || {};
-    if (!rows) { if (!TEKNO.loading) teknoLoad().then(render, (e) => { TEKNO.error = e.message; TEKNO.rows = []; render(); }); return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO jegyriportból</h3><div class="small" style="font-size:12.5px">${TEKNO.error ? "⚠️ " + E(TEKNO.error) : "Betöltés…"}</div></div>`; }
+    if (!rows) { if (!TEKNO.loading) teknoLoad().then(render, (e) => { TEKNO.error = e.message; TEKNO.rows = []; render(); }); return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO havi riportból</h3><div class="small" style="font-size:12.5px">${TEKNO.error ? "⚠️ " + E(TEKNO.error) : "Betöltés… (a riport kb. 6 MB, az első letöltés néhány másodperc)"}</div></div>`; }
     const secs = [...new Set(rows.map((r) => r.sec))];
-    const metrics = [...new Set(rows.filter((r) => r.sec === (sel.sec || secs[0])).map((r) => r.metric))];
-    const dims = [...new Set(rows.filter((r) => r.sec === (sel.sec || secs[0])).map((r) => r.dim))].filter(Boolean);
-    const t = sel.metric ? teknoSum(rows, sel.sec, sel.metric, sel.dim || null) : null;
+    const sec = teknoSecOf(rows, sel);
+    const metrics = [...new Set(rows.filter((r) => r.sec === sec).map((r) => r.metric))];
+    const dims = [...new Set(rows.filter((r) => r.sec === sec).map((r) => r.dim))].filter(Boolean).sort((a, b) => a.localeCompare(b, "hu"));
+    const t = sel.metric && metrics.includes(sel.metric) ? teknoSum(rows, sec, sel.metric, dims.includes(sel.dim) ? sel.dim : null) : null;
     const perYear = t && t.months ? Math.round((t.sum / t.months) * 12) : null;
-    return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO jegyriportból</h3><p style="font-size:12px;color:var(--gray600);margin:0 0 8px">${rows.length} adatpont · ${TEKNO.error ? "⚠️ " + E(TEKNO.error) : "csak olvasás"} · a kiválasztott mutató utolsó 12 hónapjának összege, évesítve. Átvéve a számmodellbe TÉNY-ként kerül a validációba, forrással.</p>
+    return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO havi riportból</h3><p style="font-size:12px;color:var(--gray600);margin:0 0 8px">${fmtN(rows.length)} adatpont${TEKNO.meta ? ` · adat: ${E(TEKNO.meta.from)} – ${E(TEKNO.meta.to)}` : ""} · ${TEKNO.error ? "⚠️ " + E(TEKNO.error) : "csak olvasás"} · a kiválasztott mutató utolsó 12 lezárt hónapjának összege, évesítve. Átvéve a számmodellbe TÉNY-ként kerül a validációba, forrással.</p>
       <div class="pl-inline" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <select onchange="PL2.teknoPick('sec',this.value)">${secs.map((x) => `<option value="${E(x)}"${(sel.sec || secs[0]) === x ? " selected" : ""}>${E(TEKNO_SEC[x] || x)}</option>`).join("")}</select>
+        <select onchange="PL2.teknoPick('sec',this.value)">${secs.map((x) => `<option value="${E(x)}"${sec === x ? " selected" : ""}>${E(TEKNO_SEC[x] || x)}</option>`).join("")}</select>
         <select onchange="PL2.teknoPick('metric',this.value)"><option value="">mutató…</option>${metrics.map((x) => `<option value="${E(x)}"${sel.metric === x ? " selected" : ""}>${E(x)}</option>`).join("")}</select>
-        ${dims.length ? `<select onchange="PL2.teknoPick('dim',this.value)"><option value="">összes viszonylat/csatorna</option>${dims.map((x) => `<option value="${E(x)}"${sel.dim === x ? " selected" : ""}>${E(x)}</option>`).join("")}</select>` : ""}
+        ${dims.length ? `<select onchange="PL2.teknoPick('dim',this.value)"><option value="">összesen (minden ${sec === "busz" ? "viszonylat" : sec === "nap" ? "termék" : sec === "vnem" ? "vonatnem" : "vonatnév"})</option>${dims.map((x) => `<option value="${E(x)}"${sel.dim === x ? " selected" : ""}>${E(x)}</option>`).join("")}</select>` : ""}
         <button class="btn btn-s" onclick="PL2.teknoReload()">Frissítés</button></div>
       ${t ? `<div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;align-items:flex-end"><div><div class="pl-kpi-num">${fmtN(t.sum)}</div><div class="pl-kpi-label">${t.months} hónap összege (${ym(t.from)} – ${ym(t.to)})</div></div><div><div class="pl-kpi-num">${perYear == null ? "–" : fmtN(perYear)}</div><div class="pl-kpi-label">évesítve</div></div><button class="btn btn-p" onclick="PL2.teknoApply()"${perYear ? "" : " disabled"}>Átvétel: érintett utas / év</button></div>` : ""}</div>`;
   }
@@ -4801,16 +4810,17 @@ syncFromFirebase();
     },
     kbDel(i) { S().kb2.splice(i, 1); try { localStorage.setItem("abigel_state", JSON.stringify(STATE)); } catch (_) {} render(); },
     kbPin(i) { S().kb2[i].pinned = !S().kb2[i].pinned; try { localStorage.setItem("abigel_state", JSON.stringify(STATE)); } catch (_) {} render(); },
-    teknoPick(k, v) { const p = cur(); if (!p) return; p.bizcase.tekno ||= {}; p.bizcase.tekno[k] = v; if (k === "sec") { p.bizcase.tekno.metric = ""; p.bizcase.tekno.dim = ""; } persist(); render(); },
+    teknoPick(k, v) { const p = cur(); if (!p) return; p.bizcase.tekno ||= {}; if (k !== "sec" && TEKNO.rows) p.bizcase.tekno.sec = teknoSecOf(TEKNO.rows, p.bizcase.tekno); p.bizcase.tekno[k] = v; if (k === "sec") { p.bizcase.tekno.metric = ""; p.bizcase.tekno.dim = ""; } persist(); render(); },
     teknoReload() { teknoLoad(true).then(render); render(); },
     teknoApply() {
       const p = cur(), sel = p?.bizcase.tekno; if (!p || !sel?.metric || !TEKNO.rows) return;
-      const t = teknoSum(TEKNO.rows, sel.sec, sel.metric, sel.dim || null); if (!t.months) return;
+      const sec = teknoSecOf(TEKNO.rows, sel);
+      const t = teknoSum(TEKNO.rows, sec, sel.metric, sel.dim || null); if (!t.months) return;
       const perYear = Math.round((t.sum / t.months) * 12);
       p.bizcase.model.paxYear = perYear;
-      const label = `${TEKNO_SEC[sel.sec] || sel.sec} · ${sel.metric}${sel.dim ? " · " + sel.dim : ""}`;
-      const src = `TEKNO jegyriport, ${label}, ${t.months} hónap (${ym(t.from)} – ${ym(t.to)}) összege ${fmtN(t.sum)}, évesítve`;
-      const ex = p.validation.find((v) => v.source?.startsWith("TEKNO jegyriport, " + label));
+      const label = `${TEKNO_SEC[sec] || sec} · ${sel.metric}${sel.dim ? " · " + sel.dim : ""}`;
+      const src = `TEKNO havi riport, ${label}, ${t.months} hónap (${ym(t.from)} – ${ym(t.to)}) összege ${fmtN(t.sum)}, évesítve`;
+      const ex = p.validation.find((v) => v.source?.startsWith("TEKNO havi riport, " + label));
       if (ex) { ex.text = `Érintett utas/év (mért): ${fmtN(perYear)}`; ex.source = src; ex.verifiedAt = today(); }
       else p.validation.unshift({ id: uid("v"), type: "TÉNY", text: `Érintett utas/év (mért): ${fmtN(perYear)}`, source: src, verifiedBy: "TEKNO (automatikus)", verifiedAt: today(), ifFalse: "", risk: "alacsony", status: "igazolt" });
       persist(); render();
