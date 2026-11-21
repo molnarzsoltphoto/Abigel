@@ -722,6 +722,7 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
     <div class="nav-sep">🗂️ Termékfejlesztés</div>
     <button class="nb" onclick="showPage('pl_kpi')">🎯 KPI mutatók</button>
     <button class="nb" onclick="showPage('szolgaltatasok')">📋 Szolgáltatás-katalógus</button>
+    <button class="nb" onclick="showPage('haviriport')">📊 Havi riport</button>
     <button class="nb" onclick="showPage('terkep')">🗺️ Vonat térkép</button>
     <div class="nav-lbl">Monitoring</div>
     <button class="nb" onclick="showPage('vaganyzar')">
@@ -1070,6 +1071,16 @@ label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bot
     <div class="gr"><div class="gr-av">A</div><div class="gr-b">Teljesítménymutatók – az aktuális projekt KPI-jainak nyomon követése, célok vs. tényadatok. 🎯</div></div>
     <div id="pl-kpi-content"><div class="loading"><div class="spinner"></div>Betöltés...</div></div>
   </div>
+  <div class="page-full" id="page-haviriport">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:8px 16px;border-bottom:1px solid var(--gray200);background:#fff;font-size:12.5px;">
+      <span style="color:var(--gray600)">Forrás: TEKNO – az adat ott frissül havonta, itt mindig a legfrissebb változat látszik</span>
+      <span style="margin-left:auto;display:flex;gap:14px;">
+        <a id="riport-open" href="#" target="_blank" rel="noopener" style="color:var(--g600,#1a7a50);font-weight:600;text-decoration:none">Megnyitás új lapon ↗</a>
+        <a id="riport-editor" href="#" target="_blank" rel="noopener" style="color:var(--g600,#1a7a50);font-weight:600;text-decoration:none">Adatfrissítés (szerkesztő) ↗</a>
+      </span>
+    </div>
+    <iframe id="riport-frame" title="Havi riport" loading="lazy" style="display:block;width:100%;flex:1;min-height:0;border:0;background:#f8fafc"></iframe>
+  </div>
   <div class="page-full" id="page-szolgaltatasok"><iframe id="catalog-frame" title="Szolgáltatás-katalógus" loading="lazy" style="display:block;width:100%;height:100%;min-height:0;border:0;background:#f8faf9"></iframe></div>
   <div id="modalRoot"></div>
 
@@ -1225,11 +1236,14 @@ const META={
   media:{t:'Horizont hírszemle',s:'Friss hírek a közlekedéstől a csillagokig'},
   pl_kpi:{t:'KPI mutatók',s:'Teljesítménymutatók – célok vs. tényadatok'},
   szolgaltatasok:{t:'Szolgáltatás-katalógus',s:'Utasélményt érintő szolgáltatások'},
+  haviriport:{t:'Havi riport',s:'Járatkihasználtság, előrejelzés, kínálatfejlesztési jelzések (TEKNO)'},
   beallitasok:{t:'Beállítások',s:'API kulcs és egyéb beállítások'}
 };
 const ORD=['dashboard','sajto','sajtovalasz','social','beszed','esemeny','elozmeny','feladatok','naptar','terkep','vaganyzar','media','pl_kpi','szolgaltatasok','beallitasok'];
 let mapOK=false;
 
+// A havi riport a TEKNO-ban él (egy forrás, havonta ott frissül); Abigél beágyazva mutatja.
+const TEKNO_RIPORT_URL='https://molnarzsoltphoto.github.io/termekfejlesztes/havi-riport.html';
 function showPage(n){
   document.querySelectorAll('.page,.page-full').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
@@ -1247,6 +1261,7 @@ function showPage(n){
   if(n==='elozmeny')renderHistory();
   if(n==='pl_kpi')plRenderKpi();
   if(n==='szolgaltatasok'){const f=document.getElementById('catalog-frame');if(f&&!f.getAttribute('src'))f.src='szolgaltatas-katalogus.html';}
+  if(n==='haviriport'){const f=document.getElementById('riport-frame');if(f&&!f.getAttribute('src')){f.src=TEKNO_RIPORT_URL;document.getElementById('riport-open').href=TEKNO_RIPORT_URL;document.getElementById('riport-editor').href=TEKNO_RIPORT_URL.replace('havi-riport.html','riport-szerkeszto.html');}}
   if(n==='dashboard')updStats();
   if(n==='terkep'){
     if(!mapOK){if(typeof L==='undefined'){document.getElementById('map-cnt').textContent='A térképkönyvtár nem töltődött be';}else{initMap();mapOK=true;setTimeout(()=>lMap.invalidateSize(),180);}}
