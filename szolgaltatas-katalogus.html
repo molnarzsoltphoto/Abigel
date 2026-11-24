@@ -159,9 +159,34 @@ button,input,select,textarea{font-family:var(--font-sans)}button:focus-visible,i
 .vp-card th:first-child,.vp-card td:first-child{text-align:left;}.vp-scroll{overflow-x:auto;}
 .vp-card a{color:var(--accent-bike);}.vp-muted{color:var(--ink-soft);}
 @media print{.vp-controls{display:none!important}.vp-card{break-inside:avoid;}}
+
+/* TEKNO-bejelentkezés */
+.tk-gate{position:fixed;inset:0;z-index:9999;background:rgba(21,92,52,.6);display:flex;align-items:center;justify-content:center;padding:16px}
+.tk-gate[hidden]{display:none}
+.tk-card{background:#fff;border-radius:14px;max-width:400px;width:100%;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.25);font-family:inherit;color:#1e2e27}
+.tk-card h2{margin:0 0 6px;font-size:20px}
+.tk-card p{margin:0 0 12px;font-size:13px;line-height:1.5;color:#4b5f55}
+.tk-card label{display:block;font-size:12px;font-weight:600;color:#4b5f55;margin-top:10px}
+.tk-card input{width:100%;box-sizing:border-box;margin-top:4px;padding:9px 10px;border:1px solid #cfdcd4;border-radius:8px;font-size:14px}
+.tk-row{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:10px}
+.tk-row a{font-size:12.5px;color:#155c34}
+.tk-row button{background:#2e9d5e;color:#fff;border:0;border-radius:10px;padding:9px 18px;font-size:14px;cursor:pointer}
+.tk-msg{min-height:18px;margin-top:10px;font-size:12.5px;color:#be123c}
+.tk-user{font-size:12px;display:inline-flex;gap:8px;align-items:center;margin-left:12px}
+.tk-user button{background:none;border:1px solid rgba(255,255,255,.5);color:inherit;border-radius:6px;padding:2px 8px;font-size:11.5px;cursor:pointer}
 </style>
 </head>
 <body>
+<div id="tkGate" class="tk-gate" hidden>
+  <form id="tkForm" class="tk-card" autocomplete="on">
+    <h2>Bejelentkezés a TEKNO-ba</h2>
+    <p>A TEKNO adatai csak a hozzáférési listán szereplő munkatársaknak érhetők el. Fiókot és hozzáférést az adminisztrátortól kérhetsz.</p>
+    <label for="tkEmail">E-mail-cím</label><input id="tkEmail" type="email" autocomplete="username" required>
+    <label for="tkPw">Jelszó</label><input id="tkPw" type="password" autocomplete="current-password" required>
+    <div class="tk-row"><a href="#" id="tkReset">Elfelejtett jelszó</a><button type="submit">Belépés</button></div>
+    <div id="tkMsg" class="tk-msg" aria-live="polite"></div>
+  </form>
+</div>
 
 <div id="setupScreen" class="setup" style="display:none;">
   <div class="box">
@@ -233,6 +258,7 @@ button,input,select,textarea{font-family:var(--font-sans)}button:focus-visible,i
 
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
 <script>
 // ---- 1) TÖLTSD KI A SAJÁT FIREBASE-PROJETED ADATAIVAL ----
 const firebaseConfig = {
@@ -283,7 +309,44 @@ function esc(s){ return (s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','
 function huDate(iso){ if(!iso) return ''; const p=iso.split('-'); return p[0]+'. '+HU_MONTHS[parseInt(p[1],10)-1]+' '+parseInt(p[2],10)+'.'; }
 function isOverdue(e){ return e.deadline && e.deadline < new Date().toISOString().slice(0,10) && e.status!=='live' && e.status!=='phaseout'; }
 
-function initFirebase(){
+
+// ---- TEKNO-bejelentkezés (e-mail + jelszó). A token a többi TEKNO-oldallal (havi riport, Abigél) közös: localStorage 'tekno-auth-v1' ----
+const TK_AUTH_KEY='tekno-auth-v1';
+function tkErrMsg(e){ const c=(e&&(e.code||e.message))||''; if(/invalid-credential|wrong-password|user-not-found|invalid-login|INVALID_LOGIN/.test(c)) return 'Hibás e-mail-cím vagy jelszó.'; if(/too-many-requests/.test(c)) return 'Túl sok próbálkozás. Próbáld újra néhány perc múlva.'; if(/network/.test(c)) return 'Hálózati hiba.'; if(/operation-not-allowed/.test(c)) return 'Az e-mail + jelszó belépés nincs bekapcsolva a Firebase-ben.'; if(/invalid-email/.test(c)) return 'Érvénytelen e-mail-cím.'; return (e&&e.message)||String(e); }
+async function tkShare(u){ try{ const r=await u.getIdTokenResult(); localStorage.setItem(TK_AUTH_KEY, JSON.stringify({email:u.email,idToken:r.token,refreshToken:u.refreshToken,exp:Date.parse(r.expirationTime)})); }catch(e){} }
+function tkShowUser(email){
+  let el=document.getElementById('tkUser');
+  if(!el){ el=document.createElement('span'); el.id='tkUser'; el.className='tk-user'; const host=document.getElementById('syncText'); host.parentNode.appendChild(el); }
+  el.innerHTML='🔐 '+esc(email)+' <button type="button" id="tkLogout">Kijelentkezés</button>';
+  document.getElementById('tkLogout').onclick=()=>{ localStorage.removeItem(TK_AUTH_KEY); firebase.auth().signOut().then(()=>location.reload()); };
+}
+function tkDenied(err){
+  if(err && /permission/i.test((err.code||'')+' '+(err.message||''))){
+    document.getElementById('syncText').textContent='Nincs hozzáférésed – kérd az adminisztrátort, hogy vegyen fel a hozzáférési listára.';
+    return true;
+  }
+  return false;
+}
+window.addEventListener('unhandledrejection', ev=>{ const e=ev.reason; if(e && /permission/i.test((e.code||'')+' '+(e.message||''))){ alert('Ehhez nincs szerkesztési jogosultságod. Kérd az adminisztrátort.'); ev.preventDefault(); } });
+function tkRequireLogin(){
+  return new Promise(resolve=>{
+    const auth=firebase.auth(); let done=false;
+    const gate=document.getElementById('tkGate');
+    auth.onAuthStateChanged(async u=>{
+      if(u && u.isAnonymous){ await auth.signOut(); return; }
+      if(u && u.email){ gate.hidden=true; await tkShare(u); tkShowUser(u.email); if(!done){ done=true; resolve(u); } }
+      else { gate.hidden=false; setTimeout(()=>document.getElementById('tkEmail').focus(),30); }
+    });
+    auth.onIdTokenChanged(u=>{ if(u && u.email) tkShare(u); });
+    document.getElementById('tkForm').onsubmit=async e=>{ e.preventDefault(); const m=document.getElementById('tkMsg'); m.textContent='Belépés…';
+      try{ await auth.signInWithEmailAndPassword(document.getElementById('tkEmail').value.trim(), document.getElementById('tkPw').value); m.textContent=''; }catch(err){ m.textContent=tkErrMsg(err); } };
+    document.getElementById('tkReset').onclick=async e=>{ e.preventDefault(); const em=document.getElementById('tkEmail').value.trim(); const m=document.getElementById('tkMsg');
+      if(!em){ m.textContent='Írd be az e-mail-címedet, és oda küldjük a jelszó-visszaállító levelet.'; return; }
+      try{ await auth.sendPasswordResetEmail(em); m.textContent='Ha a cím szerepel a rendszerben, elküldtük a jelszó-visszaállító levelet.'; }catch(err){ m.textContent=tkErrMsg(err); } };
+  });
+}
+
+async function initFirebase(){
   if(typeof firebase==='undefined'){document.getElementById('setupScreen').style.display='block';document.querySelector('#setupScreen .box').textContent='Nem sikerült betölteni a Firebase-t. Ellenőrizd a hálózatot.';return;}
   if(!firebaseConfig.apiKey || firebaseConfig.apiKey.indexOf('IDE_MASOLD')===0){
     document.getElementById('setupScreen').style.display='block';
@@ -292,6 +355,7 @@ function initFirebase(){
   document.getElementById('app').style.display='block';
   firebase.initializeApp(firebaseConfig);
   db=firebase.firestore();
+  await tkRequireLogin();
   col=db.collection('services');
   initStats();
   col.onSnapshot(snap=>{
@@ -308,7 +372,7 @@ function initFirebase(){
     renderTally(); route(); sendKpisToAbigel();
   }, err=>{
     document.getElementById('syncDot').classList.add('off');
-    document.getElementById('syncText').textContent='Nincs kapcsolat: '+err.message;
+    if(!tkDenied(err)) document.getElementById('syncText').textContent='Nincs kapcsolat: '+err.message;
     sendKpisToAbigel('Nem érhető el a TEKNO: '+err.message);
   });
 }

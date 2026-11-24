@@ -490,9 +490,29 @@
   }
 
 
-  // ── TEKNO havi riport (a havi-riport.html beágyazott havi összesítője, csak olvasás) ──
-  // A riport mentésekor a szerkesztő egy kis JSON-blokkot is ír (riport-summary): szekció → mutató × dimenzió × hónap.
-  const TEKNO = { rows: null, meta: null, loading: false, error: null };
+  // ── TEKNO havi riport (összesítő a TEKNO Firestore-ból, bejelentkezéssel, csak olvasás) ──
+  // A riport-szerkesztő feltöltéskor a riport/summary dokumentumba írja: szekció → mutató × dimenzió × hónap.
+  // A belépés közös a TEKNO-val és a havi riporttal (azonos origin, localStorage 'tekno-auth-v1').
+  const TK = { apiKey: "AIzaSyCNZTo0ABgE8eZ8KMgfKr4fQsGLW0jT_zA", projectId: "termekfejlesztes-1ba4e", key: "tekno-auth-v1" };
+  const tkGet = () => { try { return JSON.parse(localStorage.getItem(TK.key) || "null"); } catch (e) { return null; } };
+  async function tkPostA(url, body, form) {
+    const r = await fetch(url, { method: "POST", headers: { "Content-Type": form ? "application/x-www-form-urlencoded" : "application/json" }, body: form ? body : JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error((j.error && j.error.message) || "HTTP " + r.status);
+    return j;
+  }
+  async function tkTokenA() {
+    const a = tkGet();
+    if (!a || !a.refreshToken) return null;
+    if (a.idToken && a.exp - 120000 > Date.now()) return a.idToken;
+    try {
+      const j = await tkPostA("https://securetoken.googleapis.com/v1/token?key=" + TK.apiKey, "grant_type=refresh_token&refresh_token=" + encodeURIComponent(a.refreshToken), true);
+      Object.assign(a, { idToken: j.id_token, refreshToken: j.refresh_token, exp: Date.now() + (parseInt(j.expires_in, 10) || 3600) * 1000 });
+      localStorage.setItem(TK.key, JSON.stringify(a));
+      return a.idToken;
+    } catch (e) { localStorage.removeItem(TK.key); return null; }
+  }
+  const TEKNO = { rows: null, meta: null, loading: false, error: null, needLogin: false };
   const TEKNO_SEC = {};
   const teknoUrl = () => (typeof TEKNO_RIPORT_URL === "string" ? TEKNO_RIPORT_URL : "https://molnarzsoltphoto.github.io/termekfejlesztes/havi-riport.html");
   async function teknoLoad(force) {
@@ -500,11 +520,16 @@
     if (TEKNO.loading) return null;
     TEKNO.loading = true; TEKNO.error = null;
     try {
-      const r = await fetch(teknoUrl() + (force ? "?t=" + Date.now() : ""), { signal: AbortSignal.timeout(45000), cache: force ? "reload" : "default" });
-      if (!r.ok) throw new Error("A riport nem érhető el (HTTP " + r.status + ")");
-      const html = await r.text();
-      const m = html.match(/<script type="application\/json" id="riport-summary">([\s\S]*?)<\/script>/);
-      const sum = m ? JSON.parse(m[1]) : null;
+      const tok = await tkTokenA();
+      if (!tok) { TEKNO.needLogin = true; TEKNO.rows = null; return null; }
+      TEKNO.needLogin = false;
+      const r = await fetch("https://firestore.googleapis.com/v1/projects/" + TK.projectId + "/databases/(default)/documents/riport/summary", { headers: { Authorization: "Bearer " + tok }, signal: AbortSignal.timeout(30000) });
+      if (r.status === 401) { localStorage.removeItem(TK.key); TEKNO.needLogin = true; TEKNO.rows = null; return null; }
+      if (r.status === 403) throw new Error("Nincs hozzáférésed a TEKNO havi riporthoz – kérd az adminisztrátort, hogy vegyen fel a hozzáférési listára");
+      if (r.status === 404) throw new Error("A TEKNO-ban még nincs feltöltött riport (a riport-szerkesztő „Feltöltés a TEKNO-ba” gombja)");
+      if (!r.ok) throw new Error("A TEKNO nem érhető el (HTTP " + r.status + ")");
+      const doc = await r.json();
+      const sum = doc.fields && doc.fields.json ? JSON.parse(doc.fields.json.stringValue) : null;
       if (!sum || !sum.secs) throw new Error("A riport még nem tartalmaz havi összesítőt – mentsd újra a szerkesztőből");
       const rows = [];
       for (const [sec, s] of Object.entries(sum.secs)) {
@@ -516,7 +541,7 @@
       }
       TEKNO.rows = rows;
       TEKNO.meta = { from: sum.from, to: sum.to, generated: sum.generated };
-    } catch (e) { TEKNO.error = (e && e.name === "TimeoutError") ? "időtúllépés (45 s) a riport letöltésénél" : (e.message || String(e)); TEKNO.rows = TEKNO.rows || []; }
+    } catch (e) { TEKNO.error = (e && e.name === "TimeoutError") ? "időtúllépés a TEKNO elérésénél" : (e.message || String(e)); TEKNO.rows = TEKNO.rows || []; }
     finally { TEKNO.loading = false; }
     return TEKNO.rows;
   }
@@ -531,7 +556,10 @@
   function teknoPanel(p) {
     const rows = TEKNO.rows;
     const sel = p.bizcase.tekno || {};
-    if (!rows) { if (!TEKNO.loading) teknoLoad().then(render, (e) => { TEKNO.error = e.message; TEKNO.rows = []; render(); }); return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO havi riportból</h3><div class="small" style="font-size:12.5px">${TEKNO.error ? "⚠️ " + E(TEKNO.error) : "Betöltés… (a riport kb. 6 MB, az első letöltés néhány másodperc)"}</div></div>`; }
+    if (!rows && TEKNO.needLogin) return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO havi riportból</h3><p style="font-size:12.5px;color:var(--gray600);margin:0 0 8px">A TEKNO adatai bejelentkezéshez kötöttek. Lépj be a TEKNO-fiókoddal (ugyanaz, mint a TEKNO-ban és a Havi riport menüpontban).</p>
+      <form onsubmit="event.preventDefault();PL2.teknoLogin(this)" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><input name="email" type="email" placeholder="e-mail-cím" autocomplete="username" required style="min-width:220px"><input name="pw" type="password" placeholder="jelszó" autocomplete="current-password" required><button class="btn btn-p" type="submit">Belépés</button></form>
+      <div class="small" style="font-size:12px;color:var(--red);margin-top:6px">${TEKNO.loginMsg ? E(TEKNO.loginMsg) : ""}</div></div>`;
+    if (!rows) { if (!TEKNO.loading) teknoLoad().then(render, (e) => { TEKNO.error = e.message; TEKNO.rows = []; render(); }); return `<div class="pl-card" style="margin-top:14px"><h3>Mért utasszám a TEKNO havi riportból</h3><div class="small" style="font-size:12.5px">${TEKNO.error ? "⚠️ " + E(TEKNO.error) : "Betöltés…"}</div></div>`; }
     const secs = [...new Set(rows.map((r) => r.sec))];
     const sec = teknoSecOf(rows, sel);
     const metrics = [...new Set(rows.filter((r) => r.sec === sec).map((r) => r.metric))];
@@ -651,6 +679,17 @@
     },
     kbDel(i) { S().kb2.splice(i, 1); try { localStorage.setItem("abigel_state", JSON.stringify(STATE)); } catch (_) {} render(); },
     kbPin(i) { S().kb2[i].pinned = !S().kb2[i].pinned; try { localStorage.setItem("abigel_state", JSON.stringify(STATE)); } catch (_) {} render(); },
+    async teknoLogin(form) {
+      TEKNO.loginMsg = "";
+      try {
+        const j = await tkPostA("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + TK.apiKey, { email: form.email.value.trim(), password: form.pw.value, returnSecureToken: true });
+        localStorage.setItem(TK.key, JSON.stringify({ email: j.email, idToken: j.idToken, refreshToken: j.refreshToken, exp: Date.now() + (parseInt(j.expiresIn, 10) || 3600) * 1000 }));
+        TEKNO.needLogin = false; TEKNO.rows = null; TEKNO.error = null;
+      } catch (e) {
+        TEKNO.loginMsg = /INVALID|EMAIL_NOT_FOUND|PASSWORD/.test(e.message) ? "Hibás e-mail-cím vagy jelszó." : /TOO_MANY/.test(e.message) ? "Túl sok próbálkozás, próbáld később." : /OPERATION_NOT_ALLOWED/.test(e.message) ? "Az e-mail + jelszó belépés nincs bekapcsolva a Firebase-ben." : "Belépési hiba: " + e.message;
+      }
+      render();
+    },
     teknoPick(k, v) { const p = cur(); if (!p) return; p.bizcase.tekno ||= {}; if (k !== "sec" && TEKNO.rows) p.bizcase.tekno.sec = teknoSecOf(TEKNO.rows, p.bizcase.tekno); p.bizcase.tekno[k] = v; if (k === "sec") { p.bizcase.tekno.metric = ""; p.bizcase.tekno.dim = ""; } persist(); render(); },
     teknoReload() { teknoLoad(true).then(render); render(); },
     teknoApply() {
