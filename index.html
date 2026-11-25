@@ -1261,7 +1261,7 @@ function showPage(n){
   if(n==='elozmeny')renderHistory();
   if(n==='pl_kpi')plRenderKpi();
   if(n==='szolgaltatasok'){const f=document.getElementById('catalog-frame');if(f&&!f.getAttribute('src'))f.src='szolgaltatas-katalogus.html';}
-  if(n==='haviriport'){const f=document.getElementById('riport-frame');if(f&&!f.getAttribute('src')){f.src=TEKNO_RIPORT_URL;document.getElementById('riport-open').href=TEKNO_RIPORT_URL;document.getElementById('riport-editor').href=TEKNO_RIPORT_URL.replace('havi-riport.html','riport-szerkeszto.html');}}
+  if(n==='haviriport'){const f=document.getElementById('riport-frame');if(f&&!f.getAttribute('src')){f.src=TEKNO_RIPORT_URL+'?v='+Date.now();document.getElementById('riport-open').href=TEKNO_RIPORT_URL;document.getElementById('riport-editor').href=TEKNO_RIPORT_URL.replace('havi-riport.html','riport-szerkeszto.html');}}
   if(n==='dashboard')updStats();
   if(n==='terkep'){
     if(!mapOK){if(typeof L==='undefined'){document.getElementById('map-cnt').textContent='A térképkönyvtár nem töltődött be';}else{initMap();mapOK=true;setTimeout(()=>lMap.invalidateSize(),180);}}
